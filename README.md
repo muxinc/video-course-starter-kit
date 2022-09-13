@@ -1,34 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Video Course Starter Kit
+
+This is a Next.js app for building a video course with Mux
 
 ## Getting Started
 
-First, run the development server:
+### Database Setup
 
-```bash
-npm run dev
-# or
+Install the [Planetscale CLI](https://github.com/planetscale/cli) (on Mac `brew install planetscale/tap/pscale`)
+
+Authorize the Planetscale CLI:
+
+```
+pscale auth
+```
+
+Run the Planetscale database `video-course-starter-kit` on port 3309:
+
+```
+pscale connect video-course-starter-kit main --port 3309
+```
+
+(Make sure you're authorized with the `muxhq` Planetscale team).
+
+### Run the Dev Server
+
+```
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Github Oauth setup
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Go to [github.com/settings/developers](https://github.com/settings/developers)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Click "OAuth Apps" and create an Oauth application to use in Development:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![Github Oauth Application Setup]('../screenshots/github-oauth.png')
 
-## Learn More
+Set the callback URL to 
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+http://localhost:3000/
+```
