@@ -47,6 +47,7 @@ pscale branch create video-course-starter-kit add-lessons --org muxhq
 pscale connect video-course-starter-kit add-lessons --port 3309 --org muxhq
 
 # change schema... then,
+npx prisma generate
 npx prisma db push
 
 # when ready, make a deploy request
