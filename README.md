@@ -41,3 +41,9 @@ Set the callback URL to
 ```
 http://localhost:3000/
 ```
+
+## Recommended VS code extensions
+### Prisma
+Adds syntax highlighting, formatting, auto-completion, jump-to-definition and linting for .prisma files.
+
+https://marketplace.visualstudio.com/items?itemName=Prisma.prisma
