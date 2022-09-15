@@ -1,10 +1,12 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
 import Image from 'next/image'
-import type { Course } from "@prisma/client"
+import type { Course, Lesson } from "@prisma/client"
 import { prisma } from 'utils/prisma'
 
 type ViewCoursePageProps = {
-  course: Course
+  course: (Course & {
+    lessons: Lesson[];
+  })
 }
 
 const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
@@ -13,6 +15,13 @@ const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
       <h1 className="text-4xl text-center font-bold">
         {course.name}
       </h1>
+
+      {course.lessons.map(lesson => (
+        <div key={lesson.id}>
+          <h2 className='text-xl'>{lesson.name}</h2>
+          <p>{lesson.description}</p>
+        </div>
+      ))}
     </>
   )
 }
@@ -22,7 +31,11 @@ export default ViewCourse
 export const getStaticProps: GetStaticProps<ViewCoursePageProps> = async (context) => {
   const id = context?.params?.id
   if (typeof id !== "string") { throw new Error('missing id') };
-  const course: Course | null = await prisma.course.findUnique({ where: { id: parseInt(id) } })
+
+  const course = await prisma.course.findUnique({
+    where: { id: parseInt(id) },
+    include: { lessons: true },
+  })
 
   if (!course) {
     return {
