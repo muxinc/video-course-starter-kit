@@ -22,6 +22,18 @@ pscale connect video-course-starter-kit main --port 3309
 
 (Make sure you're authorized with the `muxhq` Planetscale team).
 
+### A note on production db connections
+
+When working with Prisma and Planetscale in production, you'll need to modify your database connection string within the environment variables.
+
+The string that is provided to you by Planetscale looks something like this:
+
+`DATABASE_URL='mysql://dbusername:************@us-east.connect.psdb.cloud/video-course-starter-kit?ssl={"rejectUnauthorized":true}'`
+
+You should modify the query parameter at the end of the string to change the `sslaccept` setting to `strict`
+
+`DATABASE_URL='mysql://dbusername:************@us-east.connect.psdb.cloud/video-course-starter-kit?sslaccept=strict'`
+
 ### Run the Dev Server
 
 ```
