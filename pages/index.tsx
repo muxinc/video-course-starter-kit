@@ -1,9 +1,15 @@
-import type { NextPage } from 'next'
+import type { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import type { Course } from "@prisma/client"
+import { prisma } from 'utils/prisma'
 import { useSession, signIn, signOut } from "next-auth/react"
 
-const Home: NextPage = () => {
+type HomePageProps = {
+  courses: Course[]
+}
+
+const Home: NextPage<HomePageProps> = ({ courses }) => {
   const { data: session } = useSession()
 
   if (session) {
@@ -31,6 +37,14 @@ const Home: NextPage = () => {
         <p>
           <button onClick={() => signIn()}>Sign in with Github</button>
         </p>
+
+        <div>
+          {courses.map(course => (
+            <div key={course.id} className="w-full border rounded p-4">
+              {course.name}
+            </div>
+          ))}
+        </div>
       </main>
 
       <footer>
@@ -40,3 +54,11 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export const getStaticProps: GetStaticProps<HomePageProps> = async (context) => {
+  const courses = await prisma.course.findMany()
+  return {
+    props: { courses },
+    revalidate: process.env.VERCEL_ENV !== "production" && 30,
+  }
+}
