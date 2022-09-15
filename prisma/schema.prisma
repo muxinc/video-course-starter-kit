@@ -1,15 +1,24 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
 model Course {
-  id      Int   @default(autoincrement()) @id
+  id      Int      @id @default(autoincrement())
   name    String
+  lessons Lesson[]
+}
+
+model Lesson {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  course      Course @relation(fields: [courseId], references: [id])
+  courseId    Int
 }
