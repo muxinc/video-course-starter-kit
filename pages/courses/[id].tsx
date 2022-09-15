@@ -1,5 +1,4 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
-import Image from 'next/image'
 import type { Course, Lesson } from "@prisma/client"
 import { prisma } from 'utils/prisma'
 
@@ -28,7 +27,7 @@ const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
 
 export default ViewCourse
 
-export const getStaticProps: GetStaticProps<ViewCoursePageProps> = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const id = context?.params?.id
   if (typeof id !== "string") { throw new Error('missing id') };
 
