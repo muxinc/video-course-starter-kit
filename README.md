@@ -6,7 +6,11 @@ This is a Next.js app for building a video course with Mux
 
 ### Database Setup
 
-Install the [Planetscale CLI](https://github.com/planetscale/cli) (on Mac `brew install planetscale/tap/pscale`)
+First, make sure you have `mysql-client` installed locally so you can take full advantage of the `pscale` CLI tool down the road:
+
+`brew install mysql-client`
+
+Next, install the [Planetscale CLI](https://github.com/planetscale/cli) (on Mac `brew install planetscale/tap/pscale`)
 
 Authorize the Planetscale CLI:
 
@@ -33,6 +37,25 @@ The string that is provided to you by Planetscale looks something like this:
 You should modify the query parameter at the end of the string to change the `sslaccept` setting to `strict`
 
 `DATABASE_URL='mysql://dbusername:************@us-east.connect.psdb.cloud/video-course-starter-kit?sslaccept=strict'`
+
+## Modifying the DB schema
+
+```
+pscale branch create video-course-starter-kit add-lessons --org muxhq
+
+# close and reopen db proxy
+pscale connect video-course-starter-kit add-lessons --port 3309 --org muxhq
+
+# change schema... then,
+npx prisma db push
+
+# when ready, make a deploy request
+pscale deploy-request create video-course-starter-kit add-lessons --org muxhq
+
+# shipit
+pscale deploy-request deploy video-course-starter-kit 1
+```
+
 
 ### Run the Dev Server
 
