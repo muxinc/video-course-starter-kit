@@ -44,6 +44,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  courses       Course[]
 }
 
 model VerificationToken {
@@ -55,9 +56,11 @@ model VerificationToken {
 }
 
 model Course {
-  id      Int      @id @default(autoincrement())
-  name    String
-  lessons Lesson[]
+  id       Int      @id @default(autoincrement())
+  name     String
+  lessons  Lesson[]
+  author   User     @relation(fields: [authorId], references: [id])
+  authorId String
 }
 
 model Lesson {
