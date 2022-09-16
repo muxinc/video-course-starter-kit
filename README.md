@@ -72,11 +72,9 @@ Click "OAuth Apps" and create an Oauth application to use in Development:
 
 ![Github Oauth Application Setup](./screenshots/github-oauth.png)
 
-Set the callback URL to 
-
-```
-http://localhost:3000/
-```
+| Application name               | Homepage URL                                       | Authorization callback URL |
+|--------------------------------|----------------------------------------------------|----------------------------|
+| Video Course Starter Kit (dev) | https://github.com/muxinc/video-course-starter-kit | http://localhost:3000/     |
 ## Recommended VS code extensions
 ### Prisma
 Adds syntax highlighting, formatting, auto-completion, jump-to-definition and linting for .prisma files.
