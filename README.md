@@ -77,11 +77,6 @@ Set the callback URL to
 ```
 http://localhost:3000/
 ```
-
-## Deploying to Vercel
-
-Note: you'll need to update the Vercel build settings to include `npx prisma generate` before `next build`
-
 ## Recommended VS code extensions
 ### Prisma
 Adds syntax highlighting, formatting, auto-completion, jump-to-definition and linting for .prisma files.
