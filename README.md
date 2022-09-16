@@ -41,17 +41,17 @@ You should modify the query parameter at the end of the string to change the `ss
 ## Modifying the DB schema
 
 ```
-pscale branch create video-course-starter-kit add-lessons --org muxhq
+pscale branch create video-course-starter-kit my-new-branch
 
-# close and reopen db proxy
-pscale connect video-course-starter-kit add-lessons --port 3309 --org muxhq
+# close and reopen db proxy to the new branch
+pscale connect video-course-starter-kit my-new-branch --port 3309
 
 # change schema... then,
 npx prisma generate
 npx prisma db push
 
 # when ready, make a deploy request
-pscale deploy-request create video-course-starter-kit add-lessons --org muxhq
+pscale deploy-request create video-course-starter-kit my-new-branch
 
 # shipit
 pscale deploy-request deploy video-course-starter-kit 1
