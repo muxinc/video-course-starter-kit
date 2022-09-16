@@ -43,7 +43,7 @@ You should modify the query parameter at the end of the string to change the `ss
 ```
 pscale branch create video-course-starter-kit my-new-branch
 
-# close and reopen db proxy to the new branch
+# after a few moments, close and reopen db proxy to the new branch
 pscale connect video-course-starter-kit my-new-branch --port 3309
 
 # change schema... then,
