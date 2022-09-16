@@ -1,9 +1,21 @@
 import type { NextPage } from 'next'
 import { prisma } from 'utils/prisma'
 import { useSession, signIn, signOut } from "next-auth/react"
+import { GetServerSideProps } from 'next'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
+import type { Session } from 'next-auth'
+import type { Course } from '@prisma/client'
+import Link from 'next/link'
 
-const AdminIndex: NextPage = () => {
+type AdminIndexPageProps = {
+  session: Session;
+  courses: Course[];
+}
+
+const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
   const { data: session } = useSession()
+
   if (session) {
     return (
       <>
@@ -12,15 +24,49 @@ const AdminIndex: NextPage = () => {
         </h1>
         Signed in as {session.user?.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
+
+        {courses.length > 0 ? (
+          <div>
+            {courses.map(course => (
+              <div key={course.id}>
+                {course.name}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+            <h1>Create your first course</h1>
+            <Link href="/admin/courses/new">
+              <a className='underline'>Leggo</a>
+            </Link>
+          </div>
+        )}
       </>
     )
   }
-  return (
-    <>
-      Not signed in <br />
-      <button className='bg-black text-white p-4' onClick={() => signIn()}>Sign in</button>
-    </>
-  )
+  return <p>Access Denied</p>
 }
 
 export default AdminIndex
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  const courses = await prisma.course.findMany({ where: { author: { email: session.user?.email } } })
+
+  return {
+    props: {
+      session,
+      courses
+    },
+  }
+}
