@@ -10,39 +10,16 @@ import Link from 'next/link'
 
 type AdminIndexPageProps = {
   session: Session;
-  courses: Course[];
+  course: Course;
 }
 
-const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
+const AdminIndex: NextPage<AdminIndexPageProps> = ({ course }) => {
   const { data: session } = useSession()
 
   if (session) {
     return (
       <>
-        <h1 className="text-4xl text-center font-bold">
-          Admin
-        </h1>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-
-        {courses.length > 0 ? (
-          <div>
-            {courses.map(course => (
-              <div key={course.id}>
-                <Link href={`/admin/courses/${course.id}`}>
-                  <a className='underline'>{course.name}</a>
-                </Link>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div>
-            <h1>Create your first course</h1>
-            <Link href="/admin/courses/new">
-              <a className='underline'>Leggo</a>
-            </Link>
-          </div>
-        )}
+        <h2 className='text-xl'>{course.name}</h2>
       </>
     )
   }
@@ -63,12 +40,33 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const courses = await prisma.course.findMany({ where: { author: { email: session.user?.email } } })
+  const id = context?.params?.id
+  if (typeof id !== "string") { throw new Error('missing id') };
+
+  const course = await prisma.course.findMany({
+    where: {
+      id: parseInt(id),
+      author: {
+        email: session.user?.email
+      }
+    },
+    include: {
+      lessons: true,
+    },
+  })
+
+  if (!course) {
+    return {
+      notFound: true
+    }
+  }
+
+  console.log(course);
 
   return {
     props: {
       session,
-      courses
+      course: course[0]
     },
   }
 }
