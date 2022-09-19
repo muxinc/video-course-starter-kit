@@ -34,7 +34,12 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
             }
           </>
         ) : (
-          <div>None yet. Create your first lesson</div>
+          <div>
+            <h2>None yet.</h2>
+            <Link href={`/admin/courses/${course.id}/lessons/new`}>
+              <a className='underline'>Create your first lesson</a>
+            </Link>
+          </div>
         )}
       </>
     )
@@ -56,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const id = context?.params?.id
+  const id = context?.params?.courseId
   if (typeof id !== "string") { throw new Error('missing id') };
 
   const course = await prisma.course.findMany({

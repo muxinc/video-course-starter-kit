@@ -15,12 +15,15 @@ const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
         {course.name}
       </h1>
 
-      {course.lessons.map(lesson => (
-        <div key={lesson.id}>
-          <h2 className='text-xl'>{lesson.name}</h2>
-          <p>{lesson.description}</p>
-        </div>
-      ))}
+      <div>
+        <h2>Lessons</h2>
+        {course.lessons.map(lesson => (
+          <div key={lesson.id}>
+            <h2 className='text-xl'>{lesson.name}</h2>
+            <p>{lesson.description}</p>
+          </div>
+        ))}
+      </div>
     </>
   )
 }
