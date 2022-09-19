@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 
 type Inputs = {
   name: string;
+  description: string;
 };
 
 type LessonCreateResult = {
@@ -12,15 +13,17 @@ type LessonCreateResult = {
 
 const AdminNewLesson: NextPage = () => {
   const router = useRouter()
+  const { courseId } = router.query
+
   const { register, handleSubmit, setError, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
-      const result: LessonCreateResult = await fetch('/api/courses', {
+      const result: LessonCreateResult = await fetch('/api/lessons', {
         method: 'POST', body: JSON.stringify(data)
       }).then(res => res.json())
 
       console.log(result);
-      router.push(`/admin/courses/${result.id}`)
+      router.push(`/admin/courses/${courseId}/lessons/${result.id}`)
     } catch (error) {
       console.log('Something went wrong')
     }
@@ -35,6 +38,10 @@ const AdminNewLesson: NextPage = () => {
         <label htmlFor="name">Name</label>
         <input className='bg-gray-100' {...register("name", { required: true })} />
         {errors.name && <span>Name is required</span>}
+
+        <label htmlFor="description">Description</label>
+        <textarea className='bg-gray-100' {...register("description", { required: true })} />
+        {errors.description && <span>Description is required</span>}
 
         <input type="submit" value='Create lesson' />
       </form>

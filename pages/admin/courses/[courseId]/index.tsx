@@ -64,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.courseId
   if (typeof id !== "string") { throw new Error('missing id') };
 
-  const course = await prisma.course.findMany({
+  const [course] = await prisma.course.findMany({
     where: {
       id: parseInt(id),
       author: {
@@ -87,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       session,
-      course: course[0]
+      course
     },
   }
 }
