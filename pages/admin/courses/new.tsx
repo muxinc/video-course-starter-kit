@@ -1,15 +1,31 @@
 import type { NextPage } from 'next'
 import { prisma } from 'utils/prisma'
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from 'next/router'
 
 type Inputs = {
-  name: string,
+  name: string;
 };
 
+type CourseCreateResult = {
+  id: number;
+}
 
 const AdminNewCourse: NextPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+  const router = useRouter()
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    try {
+      const result: CourseCreateResult = await fetch('/api/courses', {
+        method: 'POST', body: JSON.stringify(data)
+      }).then(res => res.json())
+
+      console.log(result);
+      router.push(`/admin/courses/${result.id}`)
+    } catch (error) {
+      console.log('Something went wrong')
+    }
+  };
 
   return (
     <>

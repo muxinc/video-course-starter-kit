@@ -22,7 +22,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
       }
       break
     case 'POST':
-      const { name } = req.body
+      const { name } = JSON.parse(req.body)
 
       try {
         const email = session?.user?.email
