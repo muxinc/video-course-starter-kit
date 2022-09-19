@@ -20,7 +20,6 @@ const AdminNewCourse: NextPage = () => {
         method: 'POST', body: JSON.stringify(data)
       }).then(res => res.json())
 
-      console.log(result);
       router.push(`/admin/courses/${result.id}`)
     } catch (error) {
       console.log('Something went wrong')

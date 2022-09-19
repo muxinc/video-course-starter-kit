@@ -6,8 +6,6 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
   const { method } = req
   const { id } = req.query
 
-  console.log("ok");
-
   switch (method) {
     case 'GET':
       try {

@@ -22,14 +22,16 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
         <h1 className="text-4xl text-center font-bold">
           Admin
         </h1>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+
+        <h2>Your courses</h2>
 
         {courses.length > 0 ? (
           <div>
             {courses.map(course => (
               <div key={course.id}>
-                {course.name}
+                <Link href={`/admin/courses/${course.id}`}>
+                  <a className='underline'>{course.name}</a>
+                </Link>
               </div>
             ))}
           </div>

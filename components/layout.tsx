@@ -38,7 +38,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </li>
         </ul>
       </nav>
-      <main>{children}</main>
+
+      <main className='mx-auto max-w-full md:max-w-6xl'>
+        {children}
+      </main>
       <footer>
       </footer>
     </>
