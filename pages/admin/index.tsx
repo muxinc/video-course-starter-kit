@@ -22,8 +22,6 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
         <h1 className="text-4xl text-center font-bold">
           Admin
         </h1>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
 
         {courses.length > 0 ? (
           <div>
