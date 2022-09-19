@@ -28,7 +28,10 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
             {
               course.lessons.map(lesson => (
                 <div key={lesson.id}>
-                  {lesson.name}
+
+                  <Link href={`/admin/courses/${course.id}/lessons/${lesson.id}`}>
+                    <a className='underline'>{lesson.name}</a>
+                  </Link>
                 </div>
               ))
             }
@@ -36,11 +39,12 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
         ) : (
           <div>
             <h2>None yet.</h2>
-            <Link href={`/admin/courses/${course.id}/lessons/new`}>
-              <a className='underline'>Create your first lesson</a>
-            </Link>
           </div>
         )}
+
+        <Link href={`/admin/courses/${course.id}/lessons/new`}>
+          <a className='underline'>Add a lesson</a>
+        </Link>
       </>
     )
   }
@@ -81,8 +85,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true
     }
   }
-
-  console.log(course);
 
   return {
     props: {
