@@ -23,6 +23,8 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
           Admin
         </h1>
 
+        <h2>Your courses</h2>
+
         {courses.length > 0 ? (
           <div>
             {courses.map(course => (
