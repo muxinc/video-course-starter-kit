@@ -1,17 +1,29 @@
-import type { NextPage } from 'next'
+import type { NextPage, GetServerSideProps } from 'next'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from 'next/router'
+import Mux from '@mux/mux-node';
+const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
+
+import MuxUploader from '@mux/mux-uploader-react';
+import { unstable_getServerSession } from "next-auth/next"
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import type { Session } from 'next-auth'
 
 type Inputs = {
   name: string;
   description: string;
 };
 
+type AdminNewLessonPageProps = {
+  session: Session;
+  uploadUrl: string;
+}
+
 type LessonCreateResult = {
   id: number;
 }
 
-const AdminNewLesson: NextPage = () => {
+const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl }) => {
   const router = useRouter()
   const { courseId } = router.query
 
@@ -22,7 +34,6 @@ const AdminNewLesson: NextPage = () => {
         method: 'POST', body: JSON.stringify(data)
       }).then(res => res.json())
 
-      console.log(result);
       router.push(`/admin/courses/${courseId}/lessons/${result.id}`)
     } catch (error) {
       console.log('Something went wrong')
@@ -43,6 +54,13 @@ const AdminNewLesson: NextPage = () => {
         <textarea className='bg-gray-100' {...register("description", { required: true })} />
         {errors.description && <span>Description is required</span>}
 
+        <MuxUploader
+          endpoint={uploadUrl}
+          type="bar"
+          status
+          style={{ '--button-border-radius': '40px' }}
+        />
+
         <input type="submit" value='Create lesson' />
       </form>
     </>
@@ -50,3 +68,30 @@ const AdminNewLesson: NextPage = () => {
 }
 
 export default AdminNewLesson
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  const upload = await Video.Uploads.create({
+    cors_origin: 'https://localhost:3000',
+    new_asset_settings: {
+      playback_policy: 'public'
+    }
+  });
+
+  return {
+    props: {
+      session,
+      uploadUrl: upload.url
+    },
+  }
+}
