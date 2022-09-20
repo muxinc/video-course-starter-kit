@@ -21,14 +21,13 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
   if (session) {
     return (
       <>
-        <h2 className='text-xl'>{course.name}</h2>
-        <h3>Lessons</h3>
+        <h2 className='text-xl font-semibold'>{course.name}</h2>
+        <h3 className='text-lg'>Lessons</h3>
         {course.lessons.length > 0 ? (
           <>
             {
               course.lessons.map(lesson => (
-                <div key={lesson.id}>
-
+                <div key={lesson.id} className='border-b border-gray-200 p-4 rounded mb-4'>
                   <Link href={`/admin/courses/${course.id}/lessons/${lesson.id}`}>
                     <a className='underline'>{lesson.name}</a>
                   </Link>
@@ -43,7 +42,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
         )}
 
         <Link href={`/admin/courses/${course.id}/lessons/new`}>
-          <a className='underline'>Add a lesson</a>
+          <a className='underline text-green-700'>Add a lesson</a>
         </Link>
       </>
     )
