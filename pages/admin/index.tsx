@@ -37,12 +37,13 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
           </div>
         ) : (
           <div>
-            <h1>Create your first course</h1>
-            <Link href="/admin/courses/new">
-              <a className='underline'>Leggo</a>
-            </Link>
+            <h1>No courses.</h1>
           </div>
         )}
+
+        <Link href="/admin/courses/new">
+          <a className='underline'>Create a course</a>
+        </Link>
       </>
     )
   }
