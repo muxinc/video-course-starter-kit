@@ -57,6 +57,21 @@ pscale deploy-request create video-course-starter-kit my-new-branch
 pscale deploy-request deploy video-course-starter-kit 1
 ```
 
+## Webhooks
+
+First, you'll need to install [ngrok](https://ngrok.com/download)
+
+```shell
+brew install ngrok/ngrok/ngrok
+ngrok config add-authtoken <YOUR_NGROK_TOKEN>
+ngrok http 3000
+```
+
+Visit [https://dashboard.mux.com/settings/webhooks](https://dashboard.mux.com/settings/webhooks) and add the tunnel URL as a URL to notify.
+
+Make sure to append `/api/webhooks/mux` to the end of your tunnel URL.
+
+Then, copy the Webhook signing secret value and paste it into your `.env.local` file under `MUX_WEBHOOK_SECRET`
 
 ### Run the Dev Server
 
