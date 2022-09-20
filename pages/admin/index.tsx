@@ -19,7 +19,7 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
   if (session) {
     return (
       <>
-        <h1 className="text-4xl text-center font-bold">
+        <h1 className="text-4xl font-bold">
           Admin
         </h1>
 
