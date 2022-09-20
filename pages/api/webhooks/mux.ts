@@ -61,7 +61,8 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
         // insert video record
         await prisma.video.create({
           data: {
-            playbackId: playback_ids[0].id,
+            publicPlaybackId: playback_ids[0].id,
+            privatePlaybackId: playback_ids[1].id,
             uploadId: upload_id,
             owner: {
               connect: {

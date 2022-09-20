@@ -32,6 +32,8 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
   const courseId = router.query.courseId as string
   const [isVideoUploaded, setIsVideoUploaded] = useState(false)
 
+  console.log(isVideoUploaded);
+
   const { register, handleSubmit, formState: { errors, isSubmitting, isDirty, isValid } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -81,7 +83,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
           type="submit"
           className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400'
           value='Create lesson'
-          disabled={!isDirty || !isValid || !isVideoUploaded}
+          disabled={!isVideoUploaded}
         />
       </form>
     </>
@@ -105,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const upload = await Video.Uploads.create({
     cors_origin: 'https://localhost:3000',
     new_asset_settings: {
-      playback_policy: 'public',
+      playback_policy: ['public', 'signed'],
       passthrough: JSON.stringify({ userId: session.user?.id })
     }
   });
