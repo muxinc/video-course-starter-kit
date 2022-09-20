@@ -6,6 +6,11 @@ import Mux from '@mux/mux-node';
 
 const webhookSecret = process.env.MUX_WEBHOOK_SECRET;
 
+type PlaybackId = {
+  id: string;
+  policy: | 'signed' | 'public'
+}
+
 export const config = {
   api: {
     bodyParser: false,
@@ -61,8 +66,8 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
         // insert video record
         await prisma.video.create({
           data: {
-            publicPlaybackId: playback_ids[0].id,
-            privatePlaybackId: playback_ids[1].id,
+            publicPlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'public').id,
+            privatePlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'signed').id,
             uploadId: upload_id,
             owner: {
               connect: {
