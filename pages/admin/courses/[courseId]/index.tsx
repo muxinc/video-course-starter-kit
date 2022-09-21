@@ -5,14 +5,17 @@ import { GetServerSideProps } from 'next'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from "next-auth/next"
 import type { Session } from 'next-auth'
-import type { Course, Lesson } from '@prisma/client'
+import type { Course, Lesson, Video } from '@prisma/client'
 import Link from 'next/link'
+import Image from 'next/future/image'
 
 type AdminCourseEditPageProps = {
   session: Session;
-  course: (Course & {
-    lessons: Lesson[];
-  });
+  course: Course & {
+    lessons: (Lesson & {
+      video: Video | null;
+    })[];
+  }
 }
 
 const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
@@ -21,14 +24,21 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
   if (session) {
     return (
       <>
-        <h2 className='text-xl'>{course.name}</h2>
-        <h3>Lessons</h3>
+        <h2 className='text-xl font-semibold'>{course.name}</h2>
+        <h3 className='text-lg'>Lessons</h3>
         {course.lessons.length > 0 ? (
           <>
             {
               course.lessons.map(lesson => (
-                <div key={lesson.id}>
-
+                <div key={lesson.id} className='flex gap-4 border-b border-gray-200 p-4 rounded mb-4'>
+                  {lesson.video?.publicPlaybackId && (
+                    <Image
+                      src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg`}
+                      alt={`Video thumbnail preview for ${lesson.name}`}
+                      width={320}
+                      height={240}
+                    />
+                  )}
                   <Link href={`/admin/courses/${course.id}/lessons/${lesson.id}`}>
                     <a className='underline'>{lesson.name}</a>
                   </Link>
@@ -43,7 +53,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
         )}
 
         <Link href={`/admin/courses/${course.id}/lessons/new`}>
-          <a className='underline'>Add a lesson</a>
+          <a className='underline text-green-700'>Add a lesson</a>
         </Link>
       </>
     )
@@ -76,7 +86,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     },
     include: {
-      lessons: true,
+      lessons: {
+        include: {
+          video: true
+        }
+      }
     },
   })
 

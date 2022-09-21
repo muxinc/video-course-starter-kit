@@ -13,24 +13,39 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
 
   switch (method) {
     case 'POST':
-      const { name, description, courseId } = JSON.parse(req.body)
+      const { name, description, courseId, uploadId } = JSON.parse(req.body)
 
       try {
-        const email = session?.user?.email
-        if (!email) throw Error("Cannot create course: missing email on user record")
+        const id = session?.user?.id
+        if (!id) throw Error("Cannot create course: missing id on user record")
 
         const [course] = await prisma.course.findMany({
           where: {
-            id: courseId,
+            id: parseInt(courseId),
             author: {
-              email: {
-                equals: email
+              id: {
+                equals: id
               }
             }
           },
         })
 
         if (!course) {
+          res.status(401).end();
+        }
+
+        const [video] = await prisma.video.findMany({
+          where: {
+            uploadId,
+            owner: {
+              id: {
+                equals: id
+              }
+            }
+          }
+        })
+
+        if (!video) {
           res.status(401).end();
         }
 
@@ -41,6 +56,11 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
             course: {
               connect: {
                 id: course.id
+              }
+            },
+            video: {
+              connect: {
+                uploadId
               }
             }
           }

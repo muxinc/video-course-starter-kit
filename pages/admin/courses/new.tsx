@@ -28,7 +28,7 @@ const AdminNewCourse: NextPage = () => {
 
   return (
     <>
-      <h1 className="text-4xl text-center font-bold">
+      <h1 className="text-4xl font-bold">
         New course
       </h1>
       <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>

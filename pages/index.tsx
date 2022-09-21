@@ -12,7 +12,7 @@ type HomePageProps = {
 const Home: NextPage<HomePageProps> = ({ courses }) => {
   return (
     <>
-      <h1 className="text-4xl text-center font-bold">
+      <h1 className="text-4xl font-bold">
         Video Course Starter Kit
       </h1>
 

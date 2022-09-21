@@ -45,6 +45,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   courses       Course[]
+  videos        Video[]
 }
 
 model VerificationToken {
@@ -69,4 +70,16 @@ model Lesson {
   description String
   course      Course @relation(fields: [courseId], references: [id])
   courseId    Int
+  video       Video?
+}
+
+model Video {
+  id                Int     @id @default(autoincrement())
+  lesson            Lesson? @relation(fields: [lessonId], references: [id])
+  lessonId          Int?    @unique
+  owner             User    @relation(fields: [ownerId], references: [id])
+  ownerId           String
+  uploadId          String  @unique
+  publicPlaybackId  String
+  privatePlaybackId String
 }
