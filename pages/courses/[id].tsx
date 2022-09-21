@@ -35,7 +35,7 @@ const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
           <div key={lesson.id}>
             {lesson.video?.publicPlaybackId && (
               <Image
-                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg`}
+                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
                 alt={`Video thumbnail preview for ${lesson.name}`}
                 width={320}
                 height={240}

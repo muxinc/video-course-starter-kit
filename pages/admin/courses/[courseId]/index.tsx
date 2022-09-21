@@ -33,7 +33,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
                 <div key={lesson.id} className='flex gap-4 border-b border-gray-200 p-4 rounded mb-4'>
                   {lesson.video?.publicPlaybackId && (
                     <Image
-                      src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg`}
+                      src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
                       alt={`Video thumbnail preview for ${lesson.name}`}
                       width={320}
                       height={240}
