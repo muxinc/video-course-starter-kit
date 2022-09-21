@@ -1,8 +1,9 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
-import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
 import Heading from 'components/Heading'
+import CourseOverview from 'components/CourseOverview'
+import CourseViewer from 'components/CourseViewer'
 import { useSession, signIn } from "next-auth/react"
 import Link from 'next/link'
 
@@ -22,30 +23,13 @@ const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
       <Heading>{course.name}</Heading>
 
       {session ? (
-        <Link href={`/courses/${course.id}/view`}>
-          <a>View this course &rarr;</a>
-        </Link>
+        <CourseViewer course={course} />
       ) : (
-        <a onClick={() => signIn()}>Sign in to view this course</a>
+        <>
+          <a onClick={() => signIn()}>Sign in to view this course</a>
+          <CourseOverview course={course} />
+        </>
       )}
-
-      <div>
-        <h2>Lessons</h2>
-        {course.lessons.map(lesson => (
-          <div key={lesson.id}>
-            {lesson.video?.publicPlaybackId && (
-              <Image
-                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
-                alt={`Video thumbnail preview for ${lesson.name}`}
-                width={320}
-                height={240}
-              />
-            )}
-            <h2 className='text-xl'>{lesson.name}</h2>
-            <p>{lesson.description}</p>
-          </div>
-        ))}
-      </div>
     </>
   )
 }
