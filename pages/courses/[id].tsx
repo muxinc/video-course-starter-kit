@@ -1,6 +1,7 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
 import type { Course, Lesson } from "@prisma/client"
 import { prisma } from 'utils/prisma'
+import Heading from 'components/Heading'
 
 type ViewCoursePageProps = {
   course: (Course & {
@@ -11,9 +12,7 @@ type ViewCoursePageProps = {
 const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
   return (
     <>
-      <h1 className="text-4xl font-bold">
-        {course.name}
-      </h1>
+      <Heading>{course.name}</Heading>
 
       <div>
         <h2>Lessons</h2>
