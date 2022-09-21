@@ -1,23 +1,46 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
-import type { Course, Lesson } from "@prisma/client"
+import Image from 'next/future/image'
+import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
 import Heading from 'components/Heading'
+import { useSession, signIn } from "next-auth/react"
+import Link from 'next/link'
 
 type ViewCoursePageProps = {
   course: (Course & {
-    lessons: Lesson[];
+    lessons: (Lesson & {
+      video: Video | null;
+    })[];
   })
 }
 
 const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
+  const { data: session } = useSession()
+
   return (
     <>
       <Heading>{course.name}</Heading>
+
+      {session ? (
+        <Link href={`/courses/${course.id}/view`}>
+          <a>View this course &rarr;</a>
+        </Link>
+      ) : (
+        <a onClick={() => signIn()}>Sign in to view this course</a>
+      )}
 
       <div>
         <h2>Lessons</h2>
         {course.lessons.map(lesson => (
           <div key={lesson.id}>
+            {lesson.video?.publicPlaybackId && (
+              <Image
+                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg`}
+                alt={`Video thumbnail preview for ${lesson.name}`}
+                width={320}
+                height={240}
+              />
+            )}
             <h2 className='text-xl'>{lesson.name}</h2>
             <p>{lesson.description}</p>
           </div>
@@ -35,7 +58,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const course = await prisma.course.findUnique({
     where: { id: parseInt(id) },
-    include: { lessons: true },
+    include: {
+      lessons: {
+        include: {
+          video: true
+        }
+      }
+    },
   })
 
   if (!course) {
