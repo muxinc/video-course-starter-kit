@@ -29,7 +29,7 @@ const CourseViewer = ({ course }: Props) => {
           )}
           <div>
             <h2 className='text-lg font-semibold'>{lesson.name}</h2>
-            <p>{lesson.description}</p>
+            <p className='text-md italic text-gray-600 my-2 truncate'>{lesson.description}</p>
           </div>
         </div>
       ))}
