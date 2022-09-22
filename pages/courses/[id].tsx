@@ -1,29 +1,35 @@
 import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
-import type { Course, Lesson } from "@prisma/client"
+import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
+import Heading from 'components/Heading'
+import CourseOverview from 'components/CourseOverview'
+import CourseViewer from 'components/CourseViewer'
+import { useSession, signIn } from "next-auth/react"
+import Link from 'next/link'
 
 type ViewCoursePageProps = {
   course: (Course & {
-    lessons: Lesson[];
+    lessons: (Lesson & {
+      video: Video | null;
+    })[];
   })
 }
 
 const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
+  const { data: session } = useSession()
+
   return (
     <>
-      <h1 className="text-4xl font-bold">
-        {course.name}
-      </h1>
+      <Heading>{course.name}</Heading>
 
-      <div>
-        <h2>Lessons</h2>
-        {course.lessons.map(lesson => (
-          <div key={lesson.id}>
-            <h2 className='text-xl'>{lesson.name}</h2>
-            <p>{lesson.description}</p>
-          </div>
-        ))}
-      </div>
+      {session ? (
+        <CourseViewer course={course} />
+      ) : (
+        <>
+          <a onClick={() => signIn()}>Sign in to view this course</a>
+          <CourseOverview course={course} />
+        </>
+      )}
     </>
   )
 }
@@ -36,7 +42,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const course = await prisma.course.findUnique({
     where: { id: parseInt(id) },
-    include: { lessons: true },
+    include: {
+      lessons: {
+        include: {
+          video: true
+        }
+      }
+    },
   })
 
   if (!course) {
