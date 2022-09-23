@@ -1,6 +1,8 @@
 import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
+import MuxPlayer from "@mux/mux-player-react";
+import formatDuration from 'utils/formatDuration'
 
 type Props = {
   course: (Course & {
@@ -13,7 +15,12 @@ type Props = {
 const CourseViewer = ({ course }: Props) => {
   return (
     <>
-      <Heading>Course viewer</Heading>
+      <MuxPlayer
+        className='mb-6'
+        streamType="on-demand"
+        playbackId={course.lessons[0].video?.publicPlaybackId}
+      />
+
       {course.lessons.map(lesson => (
         <div key={lesson.id} className='flex gap-6'>
           {lesson.video?.publicPlaybackId && (
@@ -28,8 +35,14 @@ const CourseViewer = ({ course }: Props) => {
             </div>
           )}
           <div>
-            <h2 className='text-lg font-semibold'>{lesson.name}</h2>
-            <p className='text-md italic text-gray-600 my-2 truncate'>{lesson.description}</p>
+            <h2 className=''>
+              <span className='font-semibold text-lg text-gray-800'>{lesson.name}</span>
+              {lesson.video && (
+                <span className='text-md italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
+              )}
+            </h2>
+            <p className='text-md italic text-gray-600 my-1 truncate'>{lesson.description}</p>
+
           </div>
         </div>
       ))}
