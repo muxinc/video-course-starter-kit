@@ -60,7 +60,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
       }
 
       try {
-        const { upload_id, playback_ids, passthrough } = data;
+        const { upload_id, playback_ids, passthrough, duration, aspect_ratio } = data;
         const metadata = JSON.parse(passthrough);
 
         // insert video record
@@ -68,6 +68,8 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
           data: {
             publicPlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'public').id,
             privatePlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'signed').id,
+            duration,
+            aspectRatio: aspect_ratio,
             uploadId: upload_id,
             owner: {
               connect: {
