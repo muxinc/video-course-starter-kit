@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
-import { prisma } from 'utils/prisma'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from 'next/router'
 
 type Inputs = {
   name: string;
+  description: string;
 };
 
 type CourseCreateResult = {
@@ -35,6 +35,10 @@ const AdminNewCourse: NextPage = () => {
         <label htmlFor="name">Name</label>
         <input className='bg-gray-100' {...register("name", { required: true })} />
         {errors.name && <span>Name is required</span>}
+
+        <label htmlFor="description">Description</label>
+        <textarea className='bg-gray-100' {...register("description", { required: true })} />
+        {errors.description && <span>Description is required</span>}
 
         <input type="submit" value='Create course' />
       </form>

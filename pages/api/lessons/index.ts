@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Course, Lesson } from '@prisma/client'
 import { unstable_getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
+import slugify from '@sindresorhus/slugify';
 
 export default async function assetHandler(req: NextApiRequest, res: NextApiResponse<Lesson>) {
   const { method } = req
@@ -53,6 +54,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
           data: {
             name,
             description,
+            slug: slugify(name),
             course: {
               connect: {
                 id: course.id

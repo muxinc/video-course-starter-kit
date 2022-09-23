@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Course } from '@prisma/client'
 import { unstable_getServerSession } from "next-auth/next"
 import { authOptions } from "./auth/[...nextauth]"
+import slugify from '@sindresorhus/slugify';
 
 export default async function assetHandler(req: NextApiRequest, res: NextApiResponse<Course[] | Course>) {
   const { method } = req
@@ -22,7 +23,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
       }
       break
     case 'POST':
-      const { name } = JSON.parse(req.body)
+      const { name, description } = JSON.parse(req.body)
 
       try {
         const email = session?.user?.email
@@ -31,6 +32,8 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
         const course = await prisma.course.create({
           data: {
             name,
+            description,
+            slug: slugify(name),
             author: {
               connect: {
                 email
