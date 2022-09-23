@@ -4,6 +4,7 @@ import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
 import MuxPlayer from "@mux/mux-player-react";
 import formatDuration from 'utils/formatDuration'
+import clsx from 'clsx';
 
 type Props = {
   course: (Course & {
@@ -25,7 +26,14 @@ const CourseViewer = ({ course }: Props) => {
       />
 
       {course.lessons.map(lesson => (
-        <a onClick={() => setPlaybackId(lesson.video?.publicPlaybackId)} key={lesson.id} className='flex gap-6 cursor-pointer hover:bg-gray-50 py-4'>
+        <a
+          onClick={() => setPlaybackId(lesson.video?.publicPlaybackId)}
+          key={lesson.id}
+          className={clsx({
+            'flex gap-6 cursor-pointer hover:bg-gray-50 py-4': true,
+            'bg-yellow-50': playbackId === lesson.video?.publicPlaybackId
+          })}
+        >
           {lesson.video?.publicPlaybackId && (
             <div className='w-32 h-[4.5rem] rounded border'>
               <Image
