@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
@@ -13,16 +14,18 @@ type Props = {
 }
 
 const CourseViewer = ({ course }: Props) => {
+  const [playbackId, setPlaybackId] = useState(course.lessons[0].video?.publicPlaybackId)
+
   return (
     <>
       <MuxPlayer
         className='mb-6'
         streamType="on-demand"
-        playbackId={course.lessons[0].video?.publicPlaybackId}
+        playbackId={playbackId}
       />
 
       {course.lessons.map(lesson => (
-        <div key={lesson.id} className='flex gap-6'>
+        <a onClick={() => setPlaybackId(lesson.video?.publicPlaybackId)} key={lesson.id} className='flex gap-6 cursor-pointer hover:bg-gray-50 py-4'>
           {lesson.video?.publicPlaybackId && (
             <div className='w-32 h-[4.5rem] rounded border'>
               <Image
@@ -35,16 +38,15 @@ const CourseViewer = ({ course }: Props) => {
             </div>
           )}
           <div>
-            <h2 className=''>
+            <h2>
               <span className='font-semibold text-lg text-gray-800'>{lesson.name}</span>
               {lesson.video && (
                 <span className='text-md italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
               )}
             </h2>
             <p className='text-md italic text-gray-600 my-1 truncate'>{lesson.description}</p>
-
           </div>
-        </div>
+        </a>
       ))}
     </>
   );
