@@ -25,6 +25,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
     return (
       <>
         <h2 className='text-xl font-semibold'>{course.name}</h2>
+        <p className=''>{course.description}</p>
         <h3 className='text-lg'>Lessons</h3>
         {course.lessons.length > 0 ? (
           <>
