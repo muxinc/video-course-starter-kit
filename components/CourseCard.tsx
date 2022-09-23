@@ -10,7 +10,7 @@ const CourseCard = ({ course }: { course: Course }) => {
             {course.name}
           </h2>
           <p>
-            {course.id}
+            {course.description}
           </p>
         </a>
       </Link>
