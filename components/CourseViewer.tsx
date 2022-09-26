@@ -36,7 +36,7 @@ const CourseViewer = ({ course }: Props) => {
             onClick={() => setActiveLesson(lesson)}
             key={lesson.id}
             className={clsx({
-              'flex gap-6 cursor-pointer hover:bg-gray-50 py-4': true,
+              'flex gap-5 cursor-pointer hover:bg-gray-50 px-6 py-4': true,
               'bg-yellow-50': playbackId === lesson.video?.publicPlaybackId
             })}
           >
