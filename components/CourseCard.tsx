@@ -1,17 +1,38 @@
-import { Course } from "@prisma/client";
+import { Course, Lesson, Video } from "@prisma/client";
 import Link from 'next/link'
+import Image from 'next/future/image'
 
-const CourseCard = ({ course }: { course: Course }) => {
+type Props = {
+  course: Course & {
+    lessons: (Lesson & {
+      video: Video | null;
+    })[];
+  }
+}
+
+const CourseCard = ({ course }: Props) => {
   return (
     <>
       <Link href={`/courses/${course.id}`}>
-        <a className='w-full border rounded p-8 transition shadow-sm hover:shadow-md cursor-pointer'>
-          <h2 className="font-semibold text-2xl">
-            {course.name}
-          </h2>
-          <p>
-            {course.id}
-          </p>
+        <a className='w-full border rounded-lg transition shadow-sm hover:shadow-md cursor-pointer'>
+          {course.lessons[0]?.video?.publicPlaybackId && (
+            <Image
+              className="w-full"
+              src={`https://image.mux.com/${course.lessons[0]?.video?.publicPlaybackId}/thumbnail.jpg?width=640`}
+              alt={`Video thumbnail preview for ${course.lessons[0]?.video?.publicPlaybackId}`}
+              width={320}
+              height={240}
+            />
+          )}
+
+          <div className="p-8">
+            <h2 className="font-semibold text-2xl">
+              {course.name}
+            </h2>
+            <p>
+              {course.description}
+            </p>
+          </div>
         </a>
       </Link>
     </>

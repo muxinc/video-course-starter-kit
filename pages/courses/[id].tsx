@@ -1,11 +1,14 @@
-import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
+import type { GetStaticProps, GetStaticPaths } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
 import Heading from 'components/Heading'
 import CourseOverview from 'components/CourseOverview'
 import CourseViewer from 'components/CourseViewer'
+import Nav from 'components/Nav'
 import { useSession, signIn } from "next-auth/react"
 import Link from 'next/link'
+import type { ReactElement } from 'react'
+import type { NextPageWithLayout } from 'pages/_app'
 
 type ViewCoursePageProps = {
   course: (Course & {
@@ -15,21 +18,30 @@ type ViewCoursePageProps = {
   })
 }
 
-const ViewCourse: NextPage<ViewCoursePageProps> = ({ course }) => {
+const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course }) => {
   const { data: session } = useSession()
 
   return (
     <>
-      <Heading>{course.name}</Heading>
 
       {session ? (
         <CourseViewer course={course} />
       ) : (
         <>
+          <Heading>{course.name}</Heading>
           <a onClick={() => signIn()}>Sign in to view this course</a>
           <CourseOverview course={course} />
         </>
       )}
+    </>
+  )
+}
+
+ViewCourse.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <>
+      <Nav />
+      {page}
     </>
   )
 }
