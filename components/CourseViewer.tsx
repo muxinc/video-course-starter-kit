@@ -30,7 +30,7 @@ const CourseViewer = ({ course }: Props) => {
   }
 
   return (
-    <div className='px-5 grid grid-cols-[70%_30%]'>
+    <div className='px-5 grid lg:grid-cols-[70%_30%]'>
       <div>
         <MuxPlayer
           className='mb-6'
