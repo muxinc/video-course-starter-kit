@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/future/image'
 
 type Props = {
+  isAdmin: boolean;
   course: Course & {
     lessons: (Lesson & {
       video: Video | null;
@@ -10,10 +11,11 @@ type Props = {
   }
 }
 
-const CourseCard = ({ course }: Props) => {
+const CourseCard = ({ course, isAdmin }: Props) => {
+  const href = isAdmin ? `/admin/courses/${course.id}` : `/courses/${course.id}`
   return (
     <>
-      <Link href={`/courses/${course.id}`}>
+      <Link href={href}>
         <a className='w-full border rounded-lg transition shadow-sm hover:shadow-md cursor-pointer'>
           {course.lessons[0]?.video?.publicPlaybackId && (
             <Image

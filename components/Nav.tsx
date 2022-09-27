@@ -52,7 +52,7 @@ const Nav = () => {
           {session ? (
             <>
               Signed in as {session.user?.email} <br />
-              <button onClick={() => signOut()}>Sign out</button>
+              <button className='underline' onClick={() => signOut()}>Sign out</button>
             </>
           ) : (
             <p>

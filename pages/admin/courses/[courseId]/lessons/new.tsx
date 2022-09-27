@@ -1,5 +1,5 @@
 import type { NextPage, GetServerSideProps } from 'next'
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { useRouter } from 'next/router'
 import Mux from '@mux/mux-node';
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
@@ -37,7 +37,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
   const courseId = router.query.courseId as string
   const [isVideoUploaded, setIsVideoUploaded] = useState(false)
 
-  const { register, handleSubmit, formState: { errors, isSubmitting, isDirty, isValid } } = useForm<Inputs>();
+  const methods = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       const result: LessonCreateResult = await fetch('/api/lessons', {
@@ -55,31 +55,34 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
       <h1 className="text-4xl font-bold">
         New lesson
       </h1>
-      <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider {...methods}>
+        <form className='flex flex-col' onSubmit={methods.handleSubmit(onSubmit)}>
 
-        <TextInput name='name' options={{ required: true }} />
-        <TextAreaInput name='description' options={{ required: true }} />
+          <TextInput name='name' options={{ required: true }} />
+          <TextAreaInput name='description' options={{ required: true }} />
 
-        <Field>
-          <MuxUploader
-            endpoint={uploadUrl}
-            type="bar"
-            status
-            style={{ '--button-border-radius': '40px' }}
-            onSuccess={() => setIsVideoUploaded(true)}
+          <Field>
+            <MuxUploader
+              endpoint={uploadUrl}
+              type="bar"
+              status
+              style={{ '--button-border-radius': '40px' }}
+              onSuccess={() => setIsVideoUploaded(true)}
+            />
+          </Field>
+
+          <input type="hidden" {...methods.register("uploadId", { value: uploadId, required: true })} />
+          <input type="hidden" {...methods.register("courseId", { value: courseId, required: true })} />
+
+          <input
+            type="submit"
+            className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400'
+            value='Create lesson'
+            disabled={!isVideoUploaded}
           />
-        </Field>
+        </form>
+      </FormProvider>
 
-        <input type="hidden" {...register("uploadId", { value: uploadId, required: true })} />
-        <input type="hidden" {...register("courseId", { value: courseId, required: true })} />
-
-        <input
-          type="submit"
-          className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400'
-          value='Create lesson'
-          disabled={!isVideoUploaded}
-        />
-      </form>
     </>
   );
 }
