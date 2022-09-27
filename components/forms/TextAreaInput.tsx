@@ -1,6 +1,7 @@
 import { useFormContext, RegisterOptions } from "react-hook-form";
 import Field from "./Field"
 import Label from "./Label"
+import TextareaAutosize from 'react-textarea-autosize';
 
 type Props = {
   name: string;
@@ -13,7 +14,7 @@ const TextAreaInput = ({ name, options }: Props) => {
   return (
     <Field>
       <Label htmlFor={name}>{name}</Label>
-      <textarea className='border border-gray-200 p-2 rounded mb-2' {...register(name, options)} />
+      <TextareaAutosize className='border border-gray-200 p-2 rounded mb-2' {...register(name, options)} />
       {errors[name] && <span className='text-red-600 text-sm'>{name} is required</span>}
     </Field>
   )
