@@ -29,7 +29,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
-      const result: CourseUpdateResult = await fetch('/api/courses', {
+      const result: CourseUpdateResult = await fetch(`/api/courses/${course.id}`, {
         method: 'PUT', body: JSON.stringify(data)
       }).then(res => res.json())
     } catch (error) {
