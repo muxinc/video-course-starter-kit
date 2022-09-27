@@ -42,7 +42,7 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
         )}
 
         <Link href="/admin/courses/new">
-          <a className='underline'>Create a course</a>
+          <a className='bg-slate-700 text-white px-4 py-3 rounded my-4 inline-block'>Create a course</a>
         </Link>
       </>
     )
