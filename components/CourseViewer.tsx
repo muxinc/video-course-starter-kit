@@ -53,21 +53,18 @@ const CourseViewer = ({ course }: Props) => {
             })}
           >
             {lesson.video?.publicPlaybackId && (
-              <div className='w-32 h-[4.5rem] rounded border'>
-                <Image
-                  className='w-full h-full object-contain'
-                  src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
-                  alt={`Video thumbnail preview for ${lesson.name}`}
-                  width={320}
-                  height={240}
-                />
-              </div>
+              <Image
+                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                alt={`Video thumbnail preview for ${lesson.name}`}
+                width={106}
+                height={60}
+              />
             )}
             <div>
               <h2>
                 <span className='font-semibold text-lg text-gray-800'>{lesson.name}</span>
                 {lesson.video && (
-                  <span className='text-md italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
+                  <span className='text-sm italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
                 )}
               </h2>
               <p className='text-md italic text-gray-600 my-1 truncate'>{lesson.description}</p>
