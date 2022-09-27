@@ -5,6 +5,7 @@ import Heading from 'components/Heading'
 import MuxPlayer from "@mux/mux-player-react";
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
+import type { UserLessonProgress } from '@prisma/client'
 
 type Props = {
   course: (Course & {
@@ -18,6 +19,16 @@ const CourseViewer = ({ course }: Props) => {
   const [activeLesson, setActiveLesson] = useState(course.lessons[0]);
   const playbackId = activeLesson.video?.publicPlaybackId
 
+  const markLessonCompleted = async () => {
+    try {
+      const result: UserLessonProgress = await fetch(`/api/lessons/${activeLesson.id}/complete`, {
+        method: 'POST'
+      }).then(res => res.json())
+    } catch (error) {
+      console.log('Something went wrong')
+    }
+  }
+
   return (
     <div className='px-5 grid grid-cols-[70%_30%]'>
       <div>
@@ -25,6 +36,7 @@ const CourseViewer = ({ course }: Props) => {
           className='mb-6'
           streamType="on-demand"
           playbackId={playbackId}
+          onEnded={markLessonCompleted}
         />
         <Heading>{activeLesson.name}</Heading>
         <p>{activeLesson.description}</p>
