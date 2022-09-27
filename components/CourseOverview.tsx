@@ -1,6 +1,7 @@
 import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
+import ReactMarkdown from 'react-markdown'
 
 type Props = {
   course: (Course & {
@@ -15,7 +16,11 @@ const CourseOverview = ({ course }: Props) => {
     <>
       <div>
         <Heading>{course.name}</Heading>
-        <p className='text-slate-700 mb-10'>{course.description}</p>
+        <p className='text-slate-700 mb-10'></p>
+
+        <ReactMarkdown>
+          {course.description}
+        </ReactMarkdown>
 
         <h2 className='text-slate-800 text-2xl mb-4 font-bold'>What you&apos;ll learn</h2>
         {course.lessons.map(lesson => (
