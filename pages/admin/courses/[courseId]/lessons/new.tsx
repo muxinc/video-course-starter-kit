@@ -10,6 +10,11 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import type { Session } from 'next-auth'
 import { useState } from 'react';
 
+import TextInput from 'components/forms/TextInput';
+import TextAreaInput from 'components/forms/TextAreaInput';
+import Field from 'components/forms/Field';
+import SubmitInput from 'components/forms/SubmitInput';
+
 type Inputs = {
   name: string;
   description: string;
@@ -32,8 +37,6 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
   const courseId = router.query.courseId as string
   const [isVideoUploaded, setIsVideoUploaded] = useState(false)
 
-  console.log(isVideoUploaded);
-
   const { register, handleSubmit, formState: { errors, isSubmitting, isDirty, isValid } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -54,19 +57,10 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
       </h1>
       <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
 
-        <div className='flex flex-col mb-6'>
-          <label htmlFor="name">Name</label>
-          <input className='bg-gray-100' {...register("name", { required: true })} />
-          {errors.name && <span>Name is required</span>}
-        </div>
+        <TextInput name='name' options={{ required: true }} />
+        <TextAreaInput name='description' options={{ required: true }} />
 
-        <div className='flex flex-col mb-6'>
-          <label htmlFor="description">Description</label>
-          <textarea className='bg-gray-100' {...register("description", { required: true })} />
-          {errors.description && <span>Description is required</span>}
-        </div>
-
-        <div className='flex flex-col mb-6'>
+        <Field>
           <MuxUploader
             endpoint={uploadUrl}
             type="bar"
@@ -74,7 +68,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
             style={{ '--button-border-radius': '40px' }}
             onSuccess={() => setIsVideoUploaded(true)}
           />
-        </div>
+        </Field>
 
         <input type="hidden" {...register("uploadId", { value: uploadId, required: true })} />
         <input type="hidden" {...register("courseId", { value: courseId, required: true })} />

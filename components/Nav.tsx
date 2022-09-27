@@ -25,11 +25,13 @@ const Nav = () => {
               </a>
             </Link>
           </li>
-          <li>
-            <Link href="/admin">
-              <a className='underline'>Admin</a>
-            </Link>
-          </li>
+          {session && (
+            <li>
+              <Link href="/admin">
+                <a className='underline'>Admin</a>
+              </Link>
+            </li>
+          )}
         </ul>
         <div className='flex-1 flex justify-center'>
           <Link href="/" passHref>
@@ -54,7 +56,7 @@ const Nav = () => {
             </>
           ) : (
             <p>
-              <button onClick={() => signIn()}>Sign in with Github</button>
+              <button onClick={() => signIn()}>Sign in with GitHub</button>
             </p>
           )}
         </div>

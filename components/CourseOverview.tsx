@@ -1,5 +1,6 @@
 import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
+import Heading from 'components/Heading'
 
 type Props = {
   course: (Course & {
@@ -13,9 +14,12 @@ const CourseOverview = ({ course }: Props) => {
   return (
     <>
       <div>
-        <h2>Lessons</h2>
+        <Heading>{course.name}</Heading>
+        <p className='text-slate-700 mb-10'>{course.description}</p>
+
+        <h2 className='text-slate-800 text-2xl mb-4 font-bold'>What you&apos;ll learn</h2>
         {course.lessons.map(lesson => (
-          <div key={lesson.id}>
+          <div key={lesson.id} className='flex flex-col md:flex-row gap-6 mb-8'>
             {lesson.video?.publicPlaybackId && (
               <Image
                 src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
@@ -24,8 +28,10 @@ const CourseOverview = ({ course }: Props) => {
                 height={240}
               />
             )}
-            <h2 className='text-xl'>{lesson.name}</h2>
-            <p>{lesson.description}</p>
+            <div>
+              <h2 className='text-xl font-semibold'>{lesson.name}</h2>
+              <p>{lesson.description}</p>
+            </div>
           </div>
         ))}
       </div>

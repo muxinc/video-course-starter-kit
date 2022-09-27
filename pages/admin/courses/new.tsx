@@ -30,7 +30,6 @@ const AdminNewCourse: NextPage = () => {
     }
   };
 
-
   return (
     <>
       <Heading>New course</Heading>
