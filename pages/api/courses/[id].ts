@@ -52,6 +52,9 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
             description: description
           },
         })
+
+        res.status(200).json(updateCourse)
+
       } catch (e) {
         console.error('Request error', e)
         res.status(500).end();
