@@ -60,7 +60,7 @@ const CourseViewer = ({ course }: Props) => {
                 height={60}
               />
             )}
-            <div>
+            <div className='overflow-hidden'>
               <h2>
                 <span className='font-semibold text-lg text-gray-800'>{lesson.name}</span>
                 {lesson.video && (
