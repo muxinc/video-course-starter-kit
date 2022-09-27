@@ -1,7 +1,6 @@
 import type { GetStaticProps, GetStaticPaths } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
-import Heading from 'components/Heading'
 import CourseOverview from 'components/CourseOverview'
 import CourseViewer from 'components/CourseViewer'
 import Nav from 'components/Nav'
@@ -23,15 +22,13 @@ const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course }) => {
 
   return (
     <>
-
       {session ? (
         <CourseViewer course={course} />
       ) : (
-        <>
-          <Heading>{course.name}</Heading>
-          <a onClick={() => signIn()}>Sign in to view this course</a>
+        <main className='mx-auto max-w-full md:max-w-6xl min-h-screen'>
+          <a className='bg-slate-800 text-white w-full p-4 rounded-lg block cursor-pointer mb-8' onClick={() => signIn()}>Sign in to view this course</a>
           <CourseOverview course={course} />
-        </>
+        </main>
       )}
     </>
   )

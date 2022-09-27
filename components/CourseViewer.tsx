@@ -5,6 +5,7 @@ import Heading from 'components/Heading'
 import MuxPlayer from "@mux/mux-player-react";
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
+import type { UserLessonProgress } from '@prisma/client'
 
 type Props = {
   course: (Course & {
@@ -18,13 +19,24 @@ const CourseViewer = ({ course }: Props) => {
   const [activeLesson, setActiveLesson] = useState(course.lessons[0]);
   const playbackId = activeLesson.video?.publicPlaybackId
 
+  const markLessonCompleted = async () => {
+    try {
+      const result: UserLessonProgress = await fetch(`/api/lessons/${activeLesson.id}/complete`, {
+        method: 'POST'
+      }).then(res => res.json())
+    } catch (error) {
+      console.log('Something went wrong')
+    }
+  }
+
   return (
-    <div className='grid grid-cols-[70%_30%]'>
+    <div className='px-5 grid lg:grid-cols-[70%_30%]'>
       <div>
         <MuxPlayer
           className='mb-6'
           streamType="on-demand"
           playbackId={playbackId}
+          onEnded={markLessonCompleted}
         />
         <Heading>{activeLesson.name}</Heading>
         <p>{activeLesson.description}</p>
@@ -41,21 +53,18 @@ const CourseViewer = ({ course }: Props) => {
             })}
           >
             {lesson.video?.publicPlaybackId && (
-              <div className='w-32 h-[4.5rem] rounded border'>
-                <Image
-                  className='w-full h-full object-contain'
-                  src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
-                  alt={`Video thumbnail preview for ${lesson.name}`}
-                  width={320}
-                  height={240}
-                />
-              </div>
+              <Image
+                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                alt={`Video thumbnail preview for ${lesson.name}`}
+                width={106}
+                height={60}
+              />
             )}
-            <div>
+            <div className='overflow-hidden'>
               <h2>
                 <span className='font-semibold text-lg text-gray-800'>{lesson.name}</span>
                 {lesson.video && (
-                  <span className='text-md italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
+                  <span className='text-sm italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
                 )}
               </h2>
               <p className='text-md italic text-gray-600 my-1 truncate'>{lesson.description}</p>

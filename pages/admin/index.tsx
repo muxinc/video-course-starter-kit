@@ -1,16 +1,23 @@
 import type { NextPage } from 'next'
 import { prisma } from 'utils/prisma'
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { GetServerSideProps } from 'next'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from "next-auth/next"
 import type { Session } from 'next-auth'
-import type { Course } from '@prisma/client'
+import type { Course, Lesson, Video } from '@prisma/client'
 import Link from 'next/link'
+import CourseGrid from 'components/CourseGrid'
+
+import Heading from 'components/Heading'
 
 type AdminIndexPageProps = {
   session: Session;
-  courses: Course[];
+  courses: (Course & {
+    lessons: (Lesson & {
+      video: Video | null;
+    })[];
+  })[]
 }
 
 const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
@@ -19,22 +26,12 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
   if (session) {
     return (
       <>
-        <h1 className="text-4xl font-bold">
-          Admin
-        </h1>
+        <Heading>Admin</Heading>
 
         <h2>Your courses</h2>
 
         {courses.length > 0 ? (
-          <div>
-            {courses.map(course => (
-              <div key={course.id}>
-                <Link href={`/admin/courses/${course.id}`}>
-                  <a className='underline'>{course.name}</a>
-                </Link>
-              </div>
-            ))}
-          </div>
+          <CourseGrid courses={courses} isAdmin />
         ) : (
           <div>
             <h1>No courses.</h1>
@@ -42,7 +39,7 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
         )}
 
         <Link href="/admin/courses/new">
-          <a className='underline'>Create a course</a>
+          <a className='bg-slate-700 text-white px-4 py-3 rounded my-4 inline-block'>Create a course</a>
         </Link>
       </>
     )
@@ -64,7 +61,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const courses = await prisma.course.findMany({ where: { author: { email: session.user?.email } } })
+  const courses = await prisma.course.findMany({
+    where: {
+      author: {
+        id: session.user?.id
+      }
+    },
+    include: {
+      lessons: {
+        include: {
+          video: true
+        }
+      }
+    }
+  })
 
   return {
     props: {

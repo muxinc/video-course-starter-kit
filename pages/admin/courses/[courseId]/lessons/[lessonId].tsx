@@ -23,13 +23,12 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
   if (session) {
     return (
       <>
-        <h2 className='text-xl'>{lesson.name}</h2>
-        <p>{lesson.description}</p>
-
         <MuxPlayer
           streamType="on-demand"
           playbackId={lesson.video?.publicPlaybackId}
         />
+        <h2 className='text-xl'>{lesson.name}</h2>
+        <p>{lesson.description}</p>
       </>
     )
   }
