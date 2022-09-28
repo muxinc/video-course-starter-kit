@@ -1,15 +1,12 @@
-import { prisma } from 'utils/prisma'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream';
 
 import Mux from '@mux/mux-node';
 
-const webhookSecret = process.env.MUX_WEBHOOK_SECRET;
+import WEBHOOK_TYPES from "../../../utils/webhooks/mux/types"
+import get from "lodash.get"
 
-type PlaybackId = {
-  id: string;
-  policy: | 'signed' | 'public'
-}
+const webhookSecret = process.env.MUX_WEBHOOK_SECRET;
 
 export const config = {
   api: {
@@ -54,42 +51,31 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
       const jsonBody = JSON.parse(rawBody);
       const { data, type } = jsonBody;
 
-      if (type !== 'video.asset.ready') {
+      const WEBHOOK_TYPE_HANDLER = get(WEBHOOK_TYPES, type);
+
+      if (WEBHOOK_TYPE_HANDLER) {
+        try {
+          const passthrough = data.passthrough || data.new_asset_settings.passthrough;
+          const metadata = JSON.parse(passthrough);
+
+          await WEBHOOK_TYPE_HANDLER({ data, metadata });
+          res.status(200).end();
+          return;
+        } catch (err) {
+          if (err instanceof Error) {
+            console.log(`Webhook Error: ${err.message}`);
+            return res.status(400).send(`Webhook Error: ${err.message}`);
+          }
+
+          console.error('Request error', err)
+          res.status(500).end();
+          return;
+        }
+      } else {
         res.status(200).end();
         return;
       }
 
-      try {
-        const { upload_id, playback_ids, passthrough, duration, aspect_ratio } = data;
-        const metadata = JSON.parse(passthrough);
-
-        // insert video record
-        await prisma.video.create({
-          data: {
-            publicPlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'public').id,
-            privatePlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'signed').id,
-            duration,
-            aspectRatio: aspect_ratio,
-            uploadId: upload_id,
-            owner: {
-              connect: {
-                id: metadata.userId,
-              }
-            }
-          }
-        });
-
-        res.status(200).end();
-      } catch (err) {
-        if (err instanceof Error) {
-          console.log(`Webhook Error: ${err.message}`);
-          return res.status(400).send(`Webhook Error: ${err.message}`);
-        }
-
-        console.error('Request error', err)
-        res.status(500).end();
-      }
-      break
     default:
       res.setHeader('Allow', ['POST'])
       res.status(405).end(`Method ${method} Not Allowed`)
