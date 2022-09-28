@@ -87,8 +87,9 @@ model Video {
   uploadId          String  @unique
   publicPlaybackId  String
   privatePlaybackId String
-  duration          Float
-  aspectRatio       String
+  duration          Float?
+  aspectRatio       String?
+  status            String  @default("preparing")
   posterTime        Float?
 }
 
