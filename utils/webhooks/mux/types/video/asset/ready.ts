@@ -13,8 +13,6 @@ type Props = {
 const handler = async ({ data, metadata }: Props) => {
   const { upload_id, playback_ids, duration, status, aspect_ratio } = data;
 
-  console.log('handling ready')
-
   // upsert video record
   await prisma.video.upsert({
     where: {
