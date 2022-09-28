@@ -22,14 +22,10 @@ const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course }) => {
 
   return (
     <>
-      {session ? (
-        <CourseViewer course={course} />
-      ) : (
-        <main className='mx-auto max-w-full md:max-w-6xl min-h-screen'>
-          <a className='bg-slate-800 text-white w-full p-4 rounded-lg block cursor-pointer mb-8' onClick={() => signIn()}>Sign in to view this course</a>
-          <CourseOverview course={course} />
-        </main>
+      {!session && (
+        <a className='bg-slate-800 hover:bg-slate-900 text-white w-full p-4 rounded-lg block cursor-pointer mb-8 mx-auto max-w-full md:max-w-6xl' onClick={() => signIn()}>Sign in to track your progress &rarr;</a>
       )}
+      <CourseViewer course={course} />
     </>
   )
 }

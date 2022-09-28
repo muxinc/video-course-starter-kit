@@ -39,7 +39,7 @@ const CourseViewer = ({ course }: Props) => {
           onEnded={markLessonCompleted}
         />
         <Heading>{activeLesson.name}</Heading>
-        <p>{activeLesson.description}</p>
+        <p className='text-slate-600 text-lg'>{activeLesson.description}</p>
       </div>
 
       <div>
@@ -62,7 +62,7 @@ const CourseViewer = ({ course }: Props) => {
             )}
             <div className='overflow-hidden'>
               <h2>
-                <span className='font-semibold text-lg text-gray-800'>{lesson.name}</span>
+                <span className='font-semibold font-cal text-lg text-gray-800'>{lesson.name}</span>
                 {lesson.video && (
                   <span className='text-sm italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
                 )}

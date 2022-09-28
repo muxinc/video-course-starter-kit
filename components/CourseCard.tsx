@@ -28,7 +28,7 @@ const CourseCard = ({ course, isAdmin }: Props) => {
           )}
 
           <div className="p-8">
-            <h2 className="font-semibold text-2xl">
+            <h2 className="font-semibold text-2xl font-cal">
               {course.name}
             </h2>
             <p>
