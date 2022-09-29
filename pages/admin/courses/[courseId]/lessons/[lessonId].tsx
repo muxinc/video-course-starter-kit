@@ -9,6 +9,7 @@ import type { Lesson, Video } from '@prisma/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Button from 'components/Button'
+import Heading from 'components/Heading'
 
 import MuxPlayer from "@mux/mux-player-react";
 
@@ -40,7 +41,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
           streamType="on-demand"
           playbackId={lesson.video?.publicPlaybackId}
         />
-        <h2 className='text-xl'>{lesson.name}</h2>
+        <Heading as='h4'>{lesson.name}</Heading>
         <p>{lesson.description}</p>
 
         <Button intent="danger" onClick={handleDelete}>Delete this lesson</Button>

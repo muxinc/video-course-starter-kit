@@ -10,6 +10,7 @@ import Link from 'next/link'
 import Image from 'next/future/image'
 import CourseForm, { Inputs } from 'components/forms/CourseForm';
 import { SubmitHandler } from "react-hook-form";
+import Heading from 'components/Heading';
 import Button from 'components/Button';
 
 type AdminCourseEditPageProps = {
@@ -44,7 +45,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
         <CourseForm onSubmit={onSubmit} course={course} />
 
         <div>
-          <h3 className='text-lg mb-4'>Lessons</h3>
+          <Heading as='h4'>Lessons</Heading>
           {course.lessons.length > 0 ? (
             <>
               {
