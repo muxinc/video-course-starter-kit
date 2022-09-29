@@ -4,6 +4,7 @@ import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import { SessionProvider } from "next-auth/react"
 import Layout from 'components/layout'
+import { Toaster } from 'react-hot-toast'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -23,6 +24,7 @@ function MyApp({
   return (
     <SessionProvider session={session}>
       {getLayout(<Component {...pageProps} />)}
+      <div><Toaster /></div>
     </SessionProvider>
   );
 }
