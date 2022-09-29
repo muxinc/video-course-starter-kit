@@ -10,6 +10,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import type { Session } from 'next-auth'
 import { useState } from 'react';
 
+import Heading from 'components/Heading';
 import TextInput from 'components/forms/TextInput';
 import TextAreaInput from 'components/forms/TextAreaInput';
 import Field from 'components/forms/Field';
@@ -52,14 +53,12 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
 
   return (
     <>
-      <h1 className="text-4xl font-bold">
-        New lesson
-      </h1>
+      <Heading>New lesson</Heading>
       <FormProvider {...methods}>
         <form className='flex flex-col' onSubmit={methods.handleSubmit(onSubmit)}>
 
-          <TextInput name='name' options={{ required: true }} />
-          <TextAreaInput name='description' options={{ required: true }} />
+          <TextInput label='Name' name='name' options={{ required: true }} />
+          <TextAreaInput label='Description' name='description' options={{ required: true }} />
 
           <Field>
             <MuxUploader
