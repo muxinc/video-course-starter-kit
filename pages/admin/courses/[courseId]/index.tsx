@@ -10,6 +10,7 @@ import Link from 'next/link'
 import Image from 'next/future/image'
 import CourseForm, { Inputs } from 'components/forms/CourseForm';
 import { SubmitHandler } from "react-hook-form";
+import Button from 'components/Button';
 
 type AdminCourseEditPageProps = {
   session: Session;
@@ -71,7 +72,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
           )}
 
           <Link href={`/admin/courses/${course.id}/lessons/new`}>
-            <a className='underline text-green-700'>Add a lesson</a>
+            <Button intent='secondary'>Add a lesson</Button>
           </Link>
         </div>
       </div>
