@@ -34,7 +34,7 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
           <CourseGrid courses={courses} isAdmin />
         ) : (
           <div>
-            <h1>No courses.</h1>
+            <Heading as='h3'>You don&apos;t have any courses yet.</Heading>
           </div>
         )}
 

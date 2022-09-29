@@ -42,7 +42,10 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
   if (session) {
     return (
       <div className='grid md:grid-cols-2'>
-        <CourseForm onSubmit={onSubmit} course={course} />
+        <div>
+          <Heading as='h2'>{course.name}</Heading>
+          <CourseForm onSubmit={onSubmit} course={course} />
+        </div>
 
         <div>
           <Heading as='h4'>Lessons</Heading>
