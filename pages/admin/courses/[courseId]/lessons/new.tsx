@@ -76,7 +76,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
 
           <input
             type="submit"
-            className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400'
+            className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400 cursor-pointer'
             value='Create lesson'
             disabled={!isVideoUploaded}
           />
