@@ -28,12 +28,14 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
 
   switch (method) {
     case 'PUT':
+      const { name, description } = JSON.parse(req.body)
+
       try {
         const lesson = await prisma.lesson.update({
           where: { id: parseInt(lessonId) },
           data: {
-            name: req.body.name,
-            description: req.body.description,
+            name,
+            description,
           }
         })
         res.status(200).json(lesson)
