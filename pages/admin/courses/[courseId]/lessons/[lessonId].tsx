@@ -1,15 +1,15 @@
-import type { NextPage } from 'next'
+import type { NextPage, GetServerSideProps } from 'next'
 import { prisma } from 'utils/prisma'
 import { useSession } from "next-auth/react"
-import { GetServerSideProps } from 'next'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from "next-auth/next"
 import type { Session } from 'next-auth'
 import type { Lesson, Video } from '@prisma/client'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-
+import { SubmitHandler } from "react-hook-form";
 import MuxPlayer from "@mux/mux-player-react";
+import LessonForm, { Inputs } from 'components/forms/LessonForm'
+import Button from 'components/Button'
 
 type AdminLessonEditPageProps = {
   session: Session;
@@ -21,6 +21,16 @@ type AdminLessonEditPageProps = {
 const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
   const { data: session } = useSession()
   const router = useRouter()
+
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    try {
+      const result = await fetch(`/api/lessons/${lesson.id}`, {
+        method: 'PUT', body: JSON.stringify(data)
+      }).then(res => res.json())
+    } catch (error) {
+      console.log('Something went wrong')
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -34,16 +44,18 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
 
   if (session) {
     return (
-      <>
-        <MuxPlayer
-          streamType="on-demand"
-          playbackId={lesson.video?.publicPlaybackId}
-        />
-        <h2 className='text-xl'>{lesson.name}</h2>
-        <p>{lesson.description}</p>
-
-        <button className='bg-red-600 text-white p-4' onClick={handleDelete}>Delete this lesson</button>
-      </>
+      <div className='grid lg:grid-cols-2 gap-6'>
+        <div>
+          <MuxPlayer
+            streamType="on-demand"
+            playbackId={lesson.video?.publicPlaybackId}
+          />
+          <Button intent="danger" onClick={handleDelete}>Delete this lesson</Button>
+        </div>
+        <div>
+          <LessonForm onSubmit={onSubmit} lesson={lesson} />
+        </div>
+      </div>
     )
   }
   return <p>Access Denied</p>

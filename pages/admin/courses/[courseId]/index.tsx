@@ -10,6 +10,8 @@ import Link from 'next/link'
 import Image from 'next/future/image'
 import CourseForm, { Inputs } from 'components/forms/CourseForm';
 import { SubmitHandler } from "react-hook-form";
+import Heading from 'components/Heading';
+import Button from 'components/Button';
 
 type AdminCourseEditPageProps = {
   session: Session;
@@ -40,10 +42,13 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
   if (session) {
     return (
       <div className='grid md:grid-cols-2'>
-        <CourseForm onSubmit={onSubmit} course={course} />
+        <div>
+          <Heading as='h2'>{course.name}</Heading>
+          <CourseForm onSubmit={onSubmit} course={course} />
+        </div>
 
         <div>
-          <h3 className='text-lg mb-4'>Lessons</h3>
+          <Heading as='h4'>Lessons</Heading>
           {course.lessons.length > 0 ? (
             <>
               {
@@ -71,7 +76,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
           )}
 
           <Link href={`/admin/courses/${course.id}/lessons/new`}>
-            <a className='underline text-green-700'>Add a lesson</a>
+            <Button intent='secondary'>Add a lesson</Button>
           </Link>
         </div>
       </div>

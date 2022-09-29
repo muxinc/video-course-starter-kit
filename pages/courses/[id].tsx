@@ -1,9 +1,9 @@
 import type { GetStaticProps, GetStaticPaths } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
-import CourseOverview from 'components/CourseOverview'
 import CourseViewer from 'components/CourseViewer'
 import Nav from 'components/Nav'
+import Banner from 'components/Banner'
 import { useSession, signIn } from "next-auth/react"
 import Link from 'next/link'
 import type { ReactElement } from 'react'
@@ -23,7 +23,13 @@ const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course }) => {
   return (
     <>
       {!session && (
-        <a className='bg-slate-800 hover:bg-slate-900 text-white w-full p-4 rounded-lg block cursor-pointer mb-8 mx-auto max-w-full md:max-w-6xl' onClick={() => signIn()}>Sign in to track your progress &rarr;</a>
+        <Banner>
+          <p className='text-center'>
+            <Link href='/api/auth/signin'>
+              <a className='underline'>Sign in</a>
+            </Link> to track your progress &rarr;{' '}
+          </p>
+        </Banner>
       )}
       <CourseViewer course={course} />
     </>

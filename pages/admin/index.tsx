@@ -8,6 +8,7 @@ import type { Session } from 'next-auth'
 import type { Course, Lesson, Video } from '@prisma/client'
 import Link from 'next/link'
 import CourseGrid from 'components/CourseGrid'
+import Button from 'components/Button'
 
 import Heading from 'components/Heading'
 
@@ -27,19 +28,18 @@ const AdminIndex: NextPage<AdminIndexPageProps> = ({ courses }) => {
     return (
       <>
         <Heading>Admin</Heading>
-
-        <h2>Your courses</h2>
+        <Heading as='h2'>Your courses</Heading>
 
         {courses.length > 0 ? (
           <CourseGrid courses={courses} isAdmin />
         ) : (
           <div>
-            <h1>No courses.</h1>
+            <Heading as='h3'>You don&apos;t have any courses yet.</Heading>
           </div>
         )}
 
         <Link href="/admin/courses/new">
-          <a className='bg-slate-700 text-white px-4 py-3 rounded my-4 inline-block'>Create a course</a>
+          <Button>Create a course</Button>
         </Link>
       </>
     )

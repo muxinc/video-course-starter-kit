@@ -1,6 +1,7 @@
 import { Course, Lesson, Video } from "@prisma/client";
 import Link from 'next/link'
 import Image from 'next/future/image'
+import Heading from './Heading'
 
 type Props = {
   isAdmin: boolean;
@@ -28,10 +29,10 @@ const CourseCard = ({ course, isAdmin }: Props) => {
           )}
 
           <div className="p-8">
-            <h2 className="font-semibold text-2xl font-cal">
+            <Heading as="h3">
               {course.name}
-            </h2>
-            <p>
+            </Heading>
+            <p className="text-slate-700">
               {course.description}
             </p>
           </div>

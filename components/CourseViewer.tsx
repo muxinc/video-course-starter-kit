@@ -62,12 +62,12 @@ const CourseViewer = ({ course }: Props) => {
             )}
             <div className='overflow-hidden'>
               <h2>
-                <span className='font-semibold font-cal text-lg text-gray-800'>{lesson.name}</span>
+                <span className='font-semibold font-cal text-lg text-slate-800'>{lesson.name}</span>
                 {lesson.video?.duration && (
-                  <span className='text-sm italic text-gray-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
+                  <span className='text-sm italic text-slate-600 truncate'> • {formatDuration(Math.round(lesson.video.duration))}</span>
                 )}
               </h2>
-              <p className='text-md italic text-gray-600 my-1 truncate'>{lesson.description}</p>
+              <p className='text-md italic text-slate-600 my-1 truncate'>{lesson.description}</p>
             </div>
           </a>
         ))}

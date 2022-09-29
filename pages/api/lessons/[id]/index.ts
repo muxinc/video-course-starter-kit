@@ -13,31 +13,49 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
   if (!session) res.status(401).end();
 
   console.log("Session", JSON.stringify(session, null, 2))
+  const id = session?.user?.id
+  if (!id) throw Error("Cannot create course: missing id on user record")
+
+  const checkLesson = await prisma.lesson.findFirst({
+    where: { id: parseInt(lessonId) },
+    include: { course: true }
+  })
+
+  if (checkLesson?.course?.authorId !== id) {
+    res.status(401).end();
+    return;
+  }
 
   switch (method) {
+    case 'PUT':
+      const { name, description } = JSON.parse(req.body)
+
+      try {
+        const lesson = await prisma.lesson.update({
+          where: { id: parseInt(lessonId) },
+          data: {
+            name,
+            description,
+          }
+        })
+        res.status(200).json(lesson)
+
+      } catch (e) {
+        console.error('Request error', e)
+        res.status(500).end();
+      }
+      break;
     case 'DELETE':
       try {
-        const id = session?.user?.id
-        if (!id) throw Error("Cannot create course: missing id on user record")
-
-        const lesson = await prisma.lesson.findFirst({
-          where: { id: parseInt(lessonId) },
-          include: { course: true }
-        })
-
-        if (lesson?.course.authorId === id) {
-          await prisma.lesson.delete({ where: { id: parseInt(lessonId) } })
-          res.status(201).end();
-        } else {
-          res.status(401).end();
-        }
+        await prisma.lesson.delete({ where: { id: parseInt(lessonId) } })
+        res.status(201).end();
       } catch (e) {
         console.error('Request error', e)
         res.status(500).end();
       }
       break
     default:
-      res.setHeader('Allow', ['DELETE'])
+      res.setHeader('Allow', ['PUT, DELETE'])
       res.status(405).end(`Method ${method} Not Allowed`)
       break
   }
