@@ -55,19 +55,20 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
             <>
               {
                 course.lessons.map(lesson => (
-                  <div key={lesson.id} className='flex gap-4 border-b border-gray-200 rounded mb-4'>
-                    {lesson.video?.publicPlaybackId && (
-                      <Image
-                        src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
-                        alt={`Video thumbnail preview for ${lesson.name}`}
-                        width={180}
-                        height={100}
-                      />
-                    )}
-                    <Link href={`/admin/courses/${course.id}/lessons/${lesson.id}`}>
-                      <a className='underline'>{lesson.name}</a>
-                    </Link>
-                  </div>
+                  <Link key={lesson.id} href={`/admin/courses/${course.id}/lessons/${lesson.id}`}>
+                    <a className='flex gap-4 border border-gray-200 rounded-lg mb-6 cursor-pointer'>
+                      {lesson.video?.publicPlaybackId && (
+                        <Image
+                          src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                          alt={`Video thumbnail preview for ${lesson.name}`}
+                          width={180}
+                          height={100}
+                        />
+                      )}
+
+                      <Heading as='h5'>{lesson.name}</Heading>
+                    </a>
+                  </Link>
                 ))
               }
             </>
