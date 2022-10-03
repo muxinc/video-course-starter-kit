@@ -12,6 +12,7 @@ import CourseForm, { Inputs } from 'components/forms/CourseForm';
 import { SubmitHandler } from "react-hook-form";
 import Heading from 'components/Heading';
 import Button from 'components/Button';
+import toast from 'react-hot-toast';
 
 type AdminCourseEditPageProps = {
   session: Session;
@@ -34,8 +35,9 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
       const result: CourseUpdateResult = await fetch(`/api/courses/${course.id}`, {
         method: 'PUT', body: JSON.stringify(data)
       }).then(res => res.json())
+      toast.success('Course updated successfully')
     } catch (error) {
-      console.log('Something went wrong')
+      toast.error('Something went wrong')
     }
   };
 

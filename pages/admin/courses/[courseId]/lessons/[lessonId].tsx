@@ -10,6 +10,7 @@ import { SubmitHandler } from "react-hook-form";
 import MuxPlayer from "@mux/mux-player-react";
 import LessonForm, { Inputs } from 'components/forms/LessonForm'
 import Button from 'components/Button'
+import toast from 'react-hot-toast';
 
 type AdminLessonEditPageProps = {
   session: Session;
@@ -27,6 +28,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
       const result = await fetch(`/api/lessons/${lesson.id}`, {
         method: 'PUT', body: JSON.stringify(data)
       }).then(res => res.json())
+      toast.success('Lesson updated successfully')
     } catch (error) {
       console.log('Something went wrong')
     }
@@ -36,9 +38,10 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
     try {
       await fetch(`/api/lessons/${lesson.id}`, { method: 'DELETE' })
       router.push(`/admin/courses/${lesson.courseId}`)
+      toast.success('Lesson deleted successfully')
     } catch (error) {
       console.log(error);
-      console.log('Something went wrong')
+      toast.error('Something went wrong')
     }
   };
 

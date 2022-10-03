@@ -20,8 +20,8 @@ const LessonForm = ({ lesson, onSubmit }: Props) => {
   return (
     <FormProvider {...methods}>
       <form className='flex flex-col max-w-lg' onSubmit={methods.handleSubmit(onSubmit)}>
-        <TextInput name='name' options={{ required: true }} />
-        <TextAreaInput name='description' options={{ required: true }} />
+        <TextInput label='Name' name='name' options={{ required: true }} />
+        <TextAreaInput label='Description' name='description' options={{ required: true }} />
         <SubmitInput value={`${lesson ? 'Update' : 'Create'} lesson`} />
       </form>
     </FormProvider>
