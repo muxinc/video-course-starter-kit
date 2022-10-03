@@ -12,10 +12,12 @@ type Props = {
     lessons: (Lesson & {
       video: Video | null;
     })[];
-  })
+  });
+  lessonProgress: number[];
+  setLessonProgress: (lessonProgess: number[]) => void;
 }
 
-const CourseViewer = ({ course }: Props) => {
+const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props) => {
   const [activeLesson, setActiveLesson] = useState(course.lessons[0]);
   const playbackId = activeLesson.video?.publicPlaybackId
 
@@ -24,6 +26,7 @@ const CourseViewer = ({ course }: Props) => {
       const result: UserLessonProgress = await fetch(`/api/lessons/${activeLesson.id}/complete`, {
         method: 'POST'
       }).then(res => res.json())
+      setLessonProgress([...lessonProgress, result.lessonId])
     } catch (error) {
       console.log('Something went wrong')
     }
@@ -52,6 +55,12 @@ const CourseViewer = ({ course }: Props) => {
               'bg-yellow-50': playbackId === lesson.video?.publicPlaybackId
             })}
           >
+            {lessonProgress.includes(lesson.id) && (
+              <span className='absolute z-10 -translate-x-2 -translate-y-2'>
+                <svg className="w-6 h-6 fill-green-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+              </span>
+            )}
+
             {lesson.video?.publicPlaybackId && (
               <Image
                 src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}

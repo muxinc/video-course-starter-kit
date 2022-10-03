@@ -1,24 +1,29 @@
-import type { GetStaticProps, GetStaticPaths } from 'next'
+import type { ReactElement } from 'react'
+import { useState } from 'react'
+import type { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
+import { useSession } from "next-auth/react"
+import Link from 'next/link'
+import type { NextPageWithLayout } from 'pages/_app'
 import CourseViewer from 'components/CourseViewer'
 import Nav from 'components/Nav'
 import Banner from 'components/Banner'
-import { useSession, signIn } from "next-auth/react"
-import Link from 'next/link'
-import type { ReactElement } from 'react'
-import type { NextPageWithLayout } from 'pages/_app'
 
 type ViewCoursePageProps = {
   course: (Course & {
     lessons: (Lesson & {
       video: Video | null;
     })[];
-  })
+  });
+  completedLessons: number[];
 }
 
-const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course }) => {
+const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course, completedLessons }) => {
   const { data: session } = useSession()
+  const [lessonProgress, setLessonProgress] = useState(completedLessons)
 
   return (
     <>
@@ -31,7 +36,7 @@ const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course }) => {
           </p>
         </Banner>
       )}
-      <CourseViewer course={course} />
+      <CourseViewer course={course} lessonProgress={lessonProgress} setLessonProgress={setLessonProgress} />
     </>
   )
 }
@@ -47,7 +52,9 @@ ViewCourse.getLayout = function getLayout(page: ReactElement) {
 
 export default ViewCourse
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
   const id = context?.params?.id
   if (typeof id !== "string") { throw new Error('missing id') };
 
@@ -64,18 +71,24 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   if (!course) {
     return {
-      notFound: true,
-      revalidate: process.env.VERCEL_ENV !== "production" && 30,
+      notFound: true
     }
   }
 
+  const completedLessons = await prisma.userLessonProgress.findMany({
+    where: {
+      userId: session?.user?.id,
+      lessonId: {
+        in: course.lessons.map(lesson => lesson.id)
+      }
+    }
+  }).then(progress => progress.map(p => p.lessonId))
+
   return {
-    props: { course },
-    revalidate: process.env.VERCEL_ENV !== "production" && 30,
+    props: {
+      session,
+      course,
+      completedLessons
+    },
   }
 }
-
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: [],
-  fallback: "blocking",
-});
