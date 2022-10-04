@@ -14,7 +14,7 @@ const Nav = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <nav className='p-4 mb-6 flex items-center'>
+      <nav className='p-4 mb-6 flex items-center space-x-3'>
         <ul className='flex gap-2'>
           <li>
             <Link href="/">
@@ -48,12 +48,12 @@ const Nav = () => {
             </a>
           </Link>
         </div>
-        <div className='text-right'>
+        <div className='text-right text-sm'>
           {session ? (
-            <>
+            <div>
               Signed in as {session.user?.email} <br />
               <button className='underline' onClick={() => signOut()}>Sign out</button>
-            </>
+            </div>
           ) : (
             <p>
               <button onClick={() => signIn()}>Sign in with GitHub</button>
