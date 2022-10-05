@@ -13,6 +13,7 @@ import { SubmitHandler } from "react-hook-form";
 import Heading from 'components/Heading';
 import Button from 'components/Button';
 import toast from 'react-hot-toast';
+import { useMutation } from '@tanstack/react-query'
 
 type AdminCourseEditPageProps = {
   session: Session;
@@ -30,15 +31,24 @@ type CourseUpdateResult = {
 const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
   const { data: session } = useSession()
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
-    try {
-      const result: CourseUpdateResult = await fetch(`/api/courses/${course.id}`, {
-        method: 'PUT', body: JSON.stringify(data)
-      }).then(res => res.json())
+  const handler = (data: Inputs) => {
+    return fetch(`/api/courses/${course.id}`, {
+      method: 'PUT', body: JSON.stringify(data)
+    }).then(res => res.json())
+  }
+
+  const mutation = useMutation(handler, {
+    onSuccess: (data: CourseUpdateResult) => {
       toast.success('Course updated successfully')
-    } catch (error) {
+    },
+    onError: (error) => {
+      console.error(error)
       toast.error('Something went wrong')
     }
+  })
+
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    mutation.mutate(data);
   };
 
   if (session) {
@@ -46,7 +56,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
       <div className='grid md:grid-cols-2'>
         <div>
           <Heading as='h2'>{course.name}</Heading>
-          <CourseForm onSubmit={onSubmit} course={course} />
+          <CourseForm onSubmit={onSubmit} course={course} isLoading={mutation.isLoading} />
         </div>
 
         <div>

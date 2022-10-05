@@ -11,6 +11,7 @@ import MuxPlayer from "@mux/mux-player-react";
 import LessonForm, { Inputs } from 'components/forms/LessonForm'
 import Button from 'components/Button'
 import toast from 'react-hot-toast';
+import { useMutation } from '@tanstack/react-query'
 
 type AdminLessonEditPageProps = {
   session: Session;
@@ -23,26 +24,39 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
   const { data: session } = useSession()
   const router = useRouter()
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
-    try {
-      const result = await fetch(`/api/lessons/${lesson.id}`, {
-        method: 'PUT', body: JSON.stringify(data)
-      }).then(res => res.json())
-      toast.success('Lesson updated successfully')
-    } catch (error) {
-      console.log('Something went wrong')
-    }
-  };
+  const updateLesson = (data: Inputs) => {
+    return fetch(`/api/lessons/${lesson.id}`, {
+      method: 'PUT', body: JSON.stringify(data)
+    }).then(res => res.json())
+  }
 
-  const handleDelete = async () => {
-    try {
-      await fetch(`/api/lessons/${lesson.id}`, { method: 'DELETE' })
-      router.push(`/admin/courses/${lesson.courseId}`)
-      toast.success('Lesson deleted successfully')
-    } catch (error) {
-      console.log(error);
+  const deleteLesson = () => {
+    return fetch(`/api/lessons/${lesson.id}`, { method: 'DELETE' })
+  }
+
+  const updateMutation = useMutation(updateLesson, {
+    onSuccess: () => {
+      toast.success('Lesson updated successfully')
+    },
+    onError: (error) => {
+      console.error(error)
       toast.error('Something went wrong')
     }
+  })
+
+  const deleteMutation = useMutation(deleteLesson, {
+    onSuccess: () => {
+      router.push(`/admin/courses/${lesson.courseId}`)
+      toast.success('Lesson deleted successfully')
+    },
+    onError: (error) => {
+      console.error(error)
+      toast.error('Something went wrong')
+    }
+  })
+
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    updateMutation.mutate(data);
   };
 
   if (session) {
@@ -53,10 +67,10 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
             streamType="on-demand"
             playbackId={lesson.video?.publicPlaybackId}
           />
-          <Button intent="danger" onClick={handleDelete}>Delete this lesson</Button>
+          <Button intent="danger" onClick={deleteMutation.mutate}>Delete this lesson</Button>
         </div>
         <div>
-          <LessonForm onSubmit={onSubmit} lesson={lesson} />
+          <LessonForm onSubmit={onSubmit} lesson={lesson} isLoading={updateMutation.isLoading} />
         </div>
       </div>
     )

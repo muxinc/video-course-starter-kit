@@ -11,10 +11,11 @@ export type Inputs = {
 
 type Props = {
   lesson?: Lesson;
-  onSubmit: SubmitHandler<Inputs>
+  onSubmit: SubmitHandler<Inputs>;
+  isLoading: boolean;
 }
 
-const LessonForm = ({ lesson, onSubmit }: Props) => {
+const LessonForm = ({ lesson, onSubmit, isLoading }: Props) => {
   const methods = useForm<Inputs>({ defaultValues: { name: lesson?.name, description: lesson?.description } });
 
   return (
@@ -22,7 +23,7 @@ const LessonForm = ({ lesson, onSubmit }: Props) => {
       <form className='flex flex-col max-w-lg' onSubmit={methods.handleSubmit(onSubmit)}>
         <TextInput label='Name' name='name' options={{ required: true }} />
         <TextAreaInput label='Description' name='description' options={{ required: true }} />
-        <SubmitInput value={`${lesson ? 'Update' : 'Create'} lesson`} />
+        <SubmitInput value={`${lesson ? 'Update' : 'Create'} lesson`} isLoading={isLoading} />
       </form>
     </FormProvider>
   )

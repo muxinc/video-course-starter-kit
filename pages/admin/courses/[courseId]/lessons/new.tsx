@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { NextPage, GetServerSideProps } from 'next'
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { useRouter } from 'next/router'
@@ -8,7 +9,8 @@ import MuxUploader from '@mux/mux-uploader-react';
 import { unstable_getServerSession } from "next-auth/next"
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import type { Session } from 'next-auth'
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import Heading from 'components/Heading';
 import TextInput from 'components/forms/TextInput';
@@ -39,16 +41,25 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
   const [isVideoUploaded, setIsVideoUploaded] = useState(false)
 
   const methods = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async data => {
-    try {
-      const result: LessonCreateResult = await fetch('/api/lessons', {
-        method: 'POST', body: JSON.stringify(data)
-      }).then(res => res.json())
 
-      router.push(`/admin/courses/${courseId}/lessons/${result.id}`)
-    } catch (error) {
-      console.log('Something went wrong')
+  const handler = (data: Inputs) => {
+    return fetch('/api/lessons', {
+      method: 'POST', body: JSON.stringify(data)
+    }).then(res => res.json())
+  }
+
+  const mutation = useMutation(handler, {
+    onSuccess: (data: LessonCreateResult) => {
+      router.push(`/admin/courses/${courseId}/lessons/${data.id}`)
+    },
+    onError: (error) => {
+      console.error(error)
+      toast.error('Something went wrong')
     }
+  })
+
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    mutation.mutate(data);
   };
 
   return (

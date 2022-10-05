@@ -6,6 +6,10 @@ import { SessionProvider } from "next-auth/react"
 import Layout from 'components/layout'
 import { Toaster } from 'react-hot-toast'
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
 }
@@ -23,8 +27,10 @@ function MyApp({
 
   return (
     <SessionProvider session={session}>
-      {getLayout(<Component {...pageProps} />)}
-      <div><Toaster /></div>
+      <QueryClientProvider client={queryClient}>
+        {getLayout(<Component {...pageProps} />)}
+        <div><Toaster /></div>
+      </QueryClientProvider>
     </SessionProvider>
   );
 }
