@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
+import EmptyState from 'components/EmptyState'
 import MuxPlayer from "@mux/mux-player-react";
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
@@ -19,7 +20,7 @@ type Props = {
 
 const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props) => {
   const [activeLesson, setActiveLesson] = useState(course.lessons[0]);
-  const playbackId = activeLesson.video?.publicPlaybackId
+  const playbackId = activeLesson?.video?.publicPlaybackId
 
   const markLessonCompleted = async () => {
     try {
@@ -32,11 +33,21 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
     }
   }
 
+  if (!course.lessons.length) {
+    return (
+      <div className="max-w-lg mt-12 mx-8 lg:mx-auto">
+        <EmptyState>
+          This course does not have any lessons
+        </EmptyState>
+      </div>
+    );
+  }
+
   return (
     <div className='px-5 grid lg:grid-cols-[70%_30%]'>
       <div>
         <MuxPlayer
-          className='mb-6'
+          className='mb-6 w-full aspect-video'
           streamType="on-demand"
           playbackId={playbackId}
           onEnded={markLessonCompleted}
