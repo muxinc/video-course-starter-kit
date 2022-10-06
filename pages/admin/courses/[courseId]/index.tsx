@@ -76,7 +76,9 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
                         />
                       )}
 
-                      <Heading as='h5'>{lesson.name}</Heading>
+                      <div className='py-2'>
+                        <Heading as='h5'>{lesson.name}</Heading>
+                      </div>
                     </a>
                   </Link>
                 ))
