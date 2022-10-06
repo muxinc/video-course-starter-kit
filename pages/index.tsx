@@ -18,6 +18,9 @@ const Home: NextPage<HomePageProps> = ({ courses }) => {
   return (
     <>
       <Heading>View these video courses</Heading>
+      {courses.find(course => course.published === false) && (
+        <Heading as="h4">Draft courses are only visible to you</Heading>
+      )}
       <CourseGrid courses={courses} />
     </>
   )
