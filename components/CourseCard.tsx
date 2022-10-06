@@ -29,6 +29,8 @@ const CourseCard = ({ course, isAdmin }: Props) => {
           )}
 
           <div className="p-8">
+            {!course.published && (<span className="bg-slate-200 text-slate-700 rounded-full text-xs py-1 px-3 mb-2 inline-block">Draft</span>)}
+
             <Heading as="h3">
               {course.name}
             </Heading>
