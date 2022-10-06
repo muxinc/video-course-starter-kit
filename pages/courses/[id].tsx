@@ -70,9 +70,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
 
   if (!course) {
-    return {
-      notFound: true
-    }
+    return { notFound: true }
+  }
+
+  if (course.published === false && course.authorId !== session?.user?.id) {
+    return { notFound: true }
   }
 
   const completedLessons = await prisma.userLessonProgress.findMany({
