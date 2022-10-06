@@ -1,6 +1,8 @@
-import type { NextPage, GetStaticProps } from 'next'
+import type { NextPage, GetStaticProps, GetServerSideProps } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
 import Heading from 'components/Heading'
 import CourseGrid from 'components/CourseGrid'
 
@@ -23,10 +25,29 @@ const Home: NextPage<HomePageProps> = ({ courses }) => {
 
 export default Home
 
-export const getStaticProps: GetStaticProps<HomePageProps> = async (context) => {
-  const courses = await prisma.course.findMany({ include: { lessons: { include: { video: true } } } })
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
+  const courses = await prisma.course.findMany({
+    where: {
+      OR: [
+        {
+          published: true
+        },
+        {
+          AND: {
+            published: false,
+            authorId: session?.user?.id,
+          },
+        },
+      ],
+    },
+    include: { lessons: { include: { video: true } } }
+  })
+
   return {
-    props: { courses },
-    revalidate: process.env.VERCEL_ENV !== "production" && 30,
+    props: {
+      courses
+    },
   }
 }
