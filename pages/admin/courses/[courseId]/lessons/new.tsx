@@ -66,8 +66,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
     <>
       <Heading>New lesson</Heading>
       <FormProvider {...methods}>
-        <form className='flex flex-col' onSubmit={methods.handleSubmit(onSubmit)}>
-
+        <form className='flex flex-col max-w-xl' onSubmit={methods.handleSubmit(onSubmit)}>
           <TextInput label='Name' name='name' options={{ required: true }} />
           <TextAreaInput label='Description' name='description' options={{ required: true }} />
 
@@ -78,6 +77,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
               status
               style={{ '--button-border-radius': '40px' }}
               onSuccess={() => setIsVideoUploaded(true)}
+              className='w-full mb-6'
             />
           </Field>
 
@@ -86,13 +86,12 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
 
           <input
             type="submit"
-            className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400 cursor-pointer'
+            className='bg-blue-500 text-white p-4 disabled:bg-slate-50 disabled:text-gray-400 cursor-pointer disabled:cursor-not-allowed w-fit'
             value='Create lesson'
             disabled={!isVideoUploaded}
           />
         </form>
       </FormProvider>
-
     </>
   );
 }
