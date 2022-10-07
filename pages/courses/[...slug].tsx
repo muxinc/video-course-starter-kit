@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useState } from 'react'
-import type { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
+import type { GetServerSideProps } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
 import { prisma } from 'utils/prisma'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
@@ -55,7 +55,7 @@ export default ViewCourse
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
-  const id = context?.params?.id
+  const id = context?.query?.slug?.[0]
   if (typeof id !== "string") { throw new Error('missing id') };
 
   const course = await prisma.course.findUnique({
