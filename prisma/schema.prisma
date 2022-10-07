@@ -65,6 +65,7 @@ model Course {
   lessons     Lesson[]
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
+  published   Boolean  @default(false)
 }
 
 model Lesson {
