@@ -13,23 +13,16 @@ type Props = {
 const handler = async ({ data, metadata }: Props) => {
   const { upload_id, playback_ids, status } = data;
 
-  // upsert video record
-  await prisma.video.upsert({
+  await prisma.video.updateMany({
     where: {
-      uploadId: upload_id
+      uploadId: upload_id,
+      status: { not: 'ready' }
     },
-    update: {},
-    create: {
+    data: {
       publicPlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'public').id,
       privatePlaybackId: playback_ids.find((row: PlaybackId) => row.policy === 'signed').id,
       status,
-      uploadId: upload_id,
-      owner: {
-        connect: {
-          id: metadata.userId,
-        }
-      }
-    },
+    }
   });
 }
 

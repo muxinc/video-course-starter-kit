@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { NextPage, GetServerSideProps } from 'next'
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { useRouter } from 'next/router'
+import { prisma } from 'utils/prisma'
+
 import Mux from '@mux/mux-node';
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
 
@@ -115,6 +117,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     new_asset_settings: {
       playback_policy: ['public', 'signed'],
       passthrough: JSON.stringify({ userId: session.user?.id })
+    }
+  });
+
+  await prisma.video.create({
+    data: {
+      uploadId: upload.id,
+      owner: {
+        connect: { id: session.user.id }
+      }
     }
   });
 
