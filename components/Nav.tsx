@@ -42,7 +42,7 @@ const Nav = () => {
                 src="/images/mux-logo.png"
                 width={100}
               />
-              <span className="inline-block ml-3 font-medium truncate">
+              <span className="inline-block ml-3 font-medium truncate text-slate-700">
                 Video Course Starter Kit
               </span>
             </a>
@@ -50,7 +50,7 @@ const Nav = () => {
         </div>
         <div className='text-right text-sm'>
           {session ? (
-            <div>
+            <div className='text-slate-700'>
               Signed in as {session.user?.email} <br />
               <button className='underline' onClick={() => signOut()}>Sign out</button>
             </div>

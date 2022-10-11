@@ -64,6 +64,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
       <div className='grid lg:grid-cols-2 gap-6'>
         <div>
           <MuxPlayer
+            className='mb-6 w-full aspect-video'
             streamType="on-demand"
             playbackId={lesson.video?.publicPlaybackId}
           />
