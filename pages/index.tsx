@@ -17,7 +17,7 @@ type HomePageProps = {
 const Home: NextPage<HomePageProps> = ({ courses }) => {
   return (
     <>
-      <Heading>View these video courses</Heading>
+      {courses.length > 0 ? (<Heading>View these video courses</Heading>) : (<Heading>There are no courses to view</Heading>)}
       {courses.find(course => course.published === false) && (
         <Heading as="h4">Draft courses are only visible to you</Heading>
       )}
@@ -38,10 +38,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           published: true
         },
         {
-          AND: {
-            published: false,
-            authorId: session?.user?.id,
-          },
+          author: {
+            id: session?.user?.id
+          }
         },
       ],
     },
