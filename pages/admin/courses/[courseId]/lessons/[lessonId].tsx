@@ -63,11 +63,16 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
     return (
       <div className='grid lg:grid-cols-2 gap-6'>
         <div>
-          <MuxPlayer
-            className='mb-6 w-full aspect-video'
-            streamType="on-demand"
-            playbackId={lesson.video?.publicPlaybackId}
-          />
+          {lesson.video?.publicPlaybackId ? (
+            <MuxPlayer
+              className='mb-6 w-full aspect-video'
+              streamType="on-demand"
+              playbackId={lesson.video.publicPlaybackId}
+            />
+          ) : (
+            <div className='mb-6 w-full aspect-video bg-gray-200' />
+          )}
+
           <Button intent="danger" onClick={deleteMutation.mutate}>Delete this lesson</Button>
         </div>
         <div>

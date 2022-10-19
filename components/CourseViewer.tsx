@@ -56,12 +56,17 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
   return (
     <div className='px-5 grid lg:grid-cols-[70%_30%]'>
       <div>
-        <MuxPlayer
-          className='mb-6 w-full aspect-video'
-          streamType="on-demand"
-          playbackId={playbackId}
-          onEnded={markLessonCompleted}
-        />
+        {playbackId ? (
+          <MuxPlayer
+            className='mb-6 w-full aspect-video'
+            streamType="on-demand"
+            playbackId={playbackId}
+            onEnded={markLessonCompleted}
+          />
+        ) : (
+          <div className='mb-6 w-full aspect-video bg-gray-200' />
+        )}
+
         <Heading>{activeLesson.name}</Heading>
         <p className='text-slate-600 text-lg'>{activeLesson.description}</p>
       </div>

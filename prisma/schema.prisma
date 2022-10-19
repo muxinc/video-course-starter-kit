@@ -86,8 +86,8 @@ model Video {
   owner             User    @relation(fields: [ownerId], references: [id])
   ownerId           String
   uploadId          String  @unique
-  publicPlaybackId  String
-  privatePlaybackId String
+  publicPlaybackId  String?
+  privatePlaybackId String?
   duration          Float?
   aspectRatio       String?
   status            String  @default("preparing")
