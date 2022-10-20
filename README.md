@@ -116,6 +116,13 @@ pscale deploy-request create video-course-starter-kit my-new-branch
 pscale deploy-request deploy video-course-starter-kit 1
 ```
 
+## Inspecting the database
+Prisma provides a nice interface to be able to load up your database contents and see the data that is powering your application. When you've connected to your Planetscale database, you can load up the Prisma GUI with the following command:
+
+```
+npx prisma studio
+```
+
 ## Handling webhooks
 
 Mux uses webhooks to communicate the status of your uploaded video assets back to your application. To handle these webhooks locally, you'll first need to install [ngrok](https://ngrok.com/download).
