@@ -2,7 +2,9 @@
 
 This project demonstrates how you can use Next.js and Mux to build your own video course platform. You might use this repo as a starting point for building your own membership-gated video course platform. 
 
-Feel free to browse the source code to see how you can use Mux's video APIs to upload, encode, and playback videos in your Next.js app.…
+Feel free to browse the source code to see how you can use Mux's video APIs to upload, encode, and playback videos in your Next.js app.
+
+Try out our hosted version of the application at [https://video-course-starter-kit.mux.dev](https://video-course-starter-kit.mux.dev)
 
 ## Stack details
 
