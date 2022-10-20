@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import { useState } from 'react'
 import type { GetServerSideProps } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
+import muxBlurHash from "@mux/blurhash";
 import { prisma } from 'utils/prisma'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from "next-auth/next"
@@ -12,10 +13,12 @@ import CourseViewer from 'components/CourseViewer'
 import Nav from 'components/Nav'
 import Banner from 'components/Banner'
 
+type VideoWithPlaceholder = Video & { placeholder?: string }
+
 type ViewCoursePageProps = {
   course: (Course & {
     lessons: (Lesson & {
-      video: Video | null;
+      video: VideoWithPlaceholder | null;
     })[];
   });
   completedLessons: number[];
@@ -85,6 +88,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     }
   }).then(progress => progress.map(p => p.lessonId))
+
+  course.lessons = await Promise.all(course.lessons.map(async (lesson) => {
+    if (lesson?.video?.publicPlaybackId) {
+      const { blurHashBase64 } = await muxBlurHash(lesson.video.publicPlaybackId);
+      (lesson.video as VideoWithPlaceholder).placeholder = blurHashBase64;
+    }
+    return lesson
+  }))
 
   return {
     props: {

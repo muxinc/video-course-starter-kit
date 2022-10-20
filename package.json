@@ -10,6 +10,7 @@
     "db:proxy": "pscale connect video-course-starter-kit main --port 3309"
   },
   "dependencies": {
+    "@mux/blurhash": "^0.1.2",
     "@mux/mux-node": "^6.3.0",
     "@mux/mux-player-react": "^1.2",
     "@mux/mux-uploader-react": "^1.0.0-beta.0",
