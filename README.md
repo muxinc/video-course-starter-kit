@@ -156,7 +156,7 @@ To create your OAuth app, follow these steps:
 |--------------------------------|----------------------------------------------------|----------------------------|
 | Video Course Starter Kit (dev) | https://github.com/muxinc/video-course-starter-kit | http://localhost:3000/     |
 
-You'll then need to copy the `GITHUB_ID` and `GITHUB_SECRET` and paste them into your environment variable on Vercel and in your `.env.local` file.
+3. Copy the `GITHUB_ID` and `GITHUB_SECRET` and paste them into your environment variables on Vercel and in your `.env.local` file.
 
 > Note: when you deploy a production copy of this application, you'll need to create another GitHub OAuth app which uses your production URL as the "Authorization callback URL" value.
 ## Recommended VS code extensions
