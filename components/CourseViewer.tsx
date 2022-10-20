@@ -4,7 +4,7 @@ import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
 import EmptyState from 'components/EmptyState'
-import MuxPlayer from "@mux/mux-player-react";
+import MuxPlayer from "@mux/mux-player-react/lazy";
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
 import type { UserLessonProgress } from '@prisma/client'
@@ -12,7 +12,7 @@ import type { UserLessonProgress } from '@prisma/client'
 type Props = {
   course: (Course & {
     lessons: (Lesson & {
-      video: Video | null;
+      video: (Video & { placeholder?: string }) | null;
     })[];
   });
   lessonProgress: number[];
@@ -26,11 +26,12 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
 
   const [activeLesson, setActiveLesson] = useState(course.lessons[lessonIndex]);
   const playbackId = activeLesson?.video?.publicPlaybackId
+  const placeholder = activeLesson?.video?.placeholder
 
   useEffect(() => {
     const lessonIndex = course.lessons.findIndex(lesson => lesson.id === activeLesson.id) + 1
     router.push(`/courses/${course.id}/lessons/${lessonIndex}`, undefined, { shallow: true })
-  }, [activeLesson, course])
+  }, [activeLesson, router, course])
 
   const markLessonCompleted = async () => {
     try {
@@ -61,6 +62,7 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
             className='mb-6 w-full aspect-video'
             streamType="on-demand"
             playbackId={playbackId}
+            placeholder={placeholder}
             onEnded={markLessonCompleted}
           />
         ) : (
