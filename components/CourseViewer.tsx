@@ -32,7 +32,8 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
   useEffect(() => {
     const lessonIndex = course.lessons.findIndex(lesson => lesson.id === activeLesson.id) + 1
     router.push(`/courses/${course.id}/lessons/${lessonIndex}`, undefined, { shallow: true })
-  }, [activeLesson, router, course])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeLesson, course])
 
   const markLessonCompleted = async () => {
     try {
