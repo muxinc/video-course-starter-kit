@@ -9,6 +9,7 @@ declare namespace NodeJS {
     MUX_TOKEN_SECRET: string;
     MUX_WEBHOOK_SECRET: string;
     NEXTAUTH_URL: string;
+    NEXTAUTH_SECRET: string;
     NODE_ENV: 'development' | 'production';
     PORT?: string;
     PWD: string;
