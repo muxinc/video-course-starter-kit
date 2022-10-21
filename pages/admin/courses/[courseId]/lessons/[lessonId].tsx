@@ -7,7 +7,7 @@ import type { Session } from 'next-auth'
 import type { Lesson, Video } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { SubmitHandler } from "react-hook-form";
-import MuxPlayer from "@mux/mux-player-react";
+import MuxPlayer from "@mux/mux-player-react/lazy";
 import LessonForm, { Inputs } from 'components/forms/LessonForm'
 import Button from 'components/Button'
 import toast from 'react-hot-toast';
