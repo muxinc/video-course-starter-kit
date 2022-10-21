@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Router from "next/router";
+import { useRouter } from 'next/router'
 import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
@@ -20,7 +20,8 @@ type Props = {
 }
 
 const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props) => {
-  const slug = (Router.query.slug as string[]) || []
+  const router = useRouter()
+  const slug = (router.query.slug as string[]) || []
   const lessonIndex = slug[2] ? parseInt(slug[2]) - 1 : 0
 
   const [activeLesson, setActiveLesson] = useState(course.lessons[lessonIndex]);
@@ -30,8 +31,8 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
 
   useEffect(() => {
     const lessonIndex = course.lessons.findIndex(lesson => lesson.id === activeLesson.id) + 1
-    Router.push(`/courses/${course.id}/lessons/${lessonIndex}`, undefined, { shallow: true })
-  }, [activeLesson, course])
+    router.push(`/courses/${course.id}/lessons/${lessonIndex}`, undefined, { shallow: true })
+  }, [activeLesson, router, course])
 
   const markLessonCompleted = async () => {
     try {
