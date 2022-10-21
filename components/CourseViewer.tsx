@@ -26,6 +26,7 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
 
   const [activeLesson, setActiveLesson] = useState(course.lessons[lessonIndex]);
   const playbackId = activeLesson?.video?.publicPlaybackId
+  const videoReady = activeLesson?.video?.status === "ready"
   const placeholder = activeLesson?.video?.placeholder
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
   return (
     <div className='px-5 grid lg:grid-cols-[70%_30%]'>
       <div>
-        {playbackId ? (
+        {playbackId && videoReady ? (
           <MuxPlayer
             className='mb-6 w-full aspect-video'
             streamType="on-demand"
@@ -89,7 +90,7 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
               </span>
             )}
 
-            {lesson.video?.publicPlaybackId && (
+            {lesson.video?.publicPlaybackId && lesson.video.status === "ready" && (
               <Image
                 src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
                 alt={`Video thumbnail preview for ${lesson.name}`}
