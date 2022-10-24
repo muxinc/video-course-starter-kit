@@ -73,7 +73,7 @@ Follow the link provided to you as a result of running this command to get the c
 
 ![Click to get your connection string](public/images/pscale-connect.png)
 ![Change your connection method to Prisma](public/images/pscale-prisma.png)
-![Copy the value and paste into your .env.local file](public/images/pscale-copy.png)
+![Copy the value and paste into your .env.local file](public/images/pscale-string.png)
 
 Copy the resulting authenticated database url value into your `.env.local` file and into your Vercel environment variables.
 
