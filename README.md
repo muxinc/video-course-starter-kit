@@ -69,30 +69,18 @@ Create a new database in your Planetscale account called `video-course-starter-k
 ```
 pscale database create video-course-starter-kit
 ```
+Follow the link provided to you as a result of running this command to get the connection string for your database.
+
+![Click to get your connection string](public/images/pscale-connect.png)
+![Change your connection method to Prisma](public/images/pscale-prisma.png)
+![Copy the value and paste into your .env.local file](public/images/pscale-copy.png)
 
 Copy the resulting authenticated database url value into your `.env.local` file and into your Vercel environment variables.
-
 
 We'll connect to this database locally by opening a connection to it on a local port. Here's how you can connect to the Planetscale database `video-course-starter-kit` on port 3309:
 
 ```
 pscale connect video-course-starter-kit main --port 3309
-```
-
-### A note on production database connections
-
-When working with Prisma and Planetscale in production, you'll need to modify your database connection string within the environment variables.
-
-The string that is provided to you by Planetscale looks something like this:
-
-```
-DATABASE_URL='mysql://dbusername:************@us-east.connect.psdb.cloud/video-course-starter-kit?ssl={"rejectUnauthorized":true}'
-```
-
-You should modify the query parameter at the end of the string to change the `sslaccept` setting to `strict`
-
-```
-DATABASE_URL='mysql://dbusername:************@us-east.connect.psdb.cloud/video-course-starter-kit?sslaccept=strict'
 ```
 
 ## Modifying the database schema
