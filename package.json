@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npx prisma generate && next dev",
-    "build": "npx prisma generate && next build",
+    "build": "npx prisma generate && npx prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
     "db:proxy": "pscale connect video-course-starter-kit main --port 3309"
