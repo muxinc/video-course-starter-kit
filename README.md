@@ -70,7 +70,7 @@ Create a new database in your Planetscale account called `video-course-starter-k
 pscale database create video-course-starter-kit
 ```
 
-Copy the database user and password values into your `.env.local` file and into your Vercel environment variables.
+Copy the resulting authenticated database url value into your `.env.local` file and into your Vercel environment variables.
 
 
 We'll connect to this database locally by opening a connection to it on a local port. Here's how you can connect to the Planetscale database `video-course-starter-kit` on port 3309:
