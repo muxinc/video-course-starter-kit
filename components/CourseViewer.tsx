@@ -66,6 +66,11 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
             playbackId={playbackId}
             placeholder={placeholder}
             onEnded={markLessonCompleted}
+            metadata={{
+              video_series: activeLesson.courseId,
+              video_title: activeLesson.name,
+              player_name: "Video Course Starter Kit",
+            }}
           />
         ) : (
           <div className='mb-6 w-full aspect-video bg-gray-200' />

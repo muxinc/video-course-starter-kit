@@ -68,6 +68,11 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
               className='mb-6 w-full aspect-video'
               streamType="on-demand"
               playbackId={lesson.video.publicPlaybackId}
+              metadata={{
+                video_series: lesson.courseId,
+                video_title: lesson.name,
+                player_name: "Video Course Starter Kit",
+              }}
             />
           ) : (
             <div className='mb-6 w-full aspect-video bg-gray-200' />
