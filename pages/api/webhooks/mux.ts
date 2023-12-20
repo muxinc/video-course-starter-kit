@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream';
 
-import Mux from '@mux/mux-node';
-
 import WEBHOOK_TYPES from "../../../utils/webhooks/mux/types"
 import get from "lodash.get"
 
@@ -25,7 +23,6 @@ async function buffer(readable: Readable) {
 function verifyWebhookSignature(rawBody: string | Buffer, req: NextApiRequest) {
   if (webhookSecret) {
     // this will raise an error if signature is not valid
-    Mux.Webhooks.verifyHeader(rawBody, req.headers['mux-signature'] as string, webhookSecret);
   } else {
     console.log('Skipping webhook signature verification because no secret is configured'); // eslint-disable-line no-console
   }

@@ -21,8 +21,8 @@ const CourseCard = ({ course, isAdmin }: Props) => {
           {course.lessons[0]?.video?.publicPlaybackId && (
             <Image
               className="w-full"
-              src={`https://image.mux.com/${course.lessons[0]?.video?.publicPlaybackId}/thumbnail.jpg?width=640`}
-              alt={`Video thumbnail preview for ${course.lessons[0]?.video?.publicPlaybackId}`}
+              src={`https://img.youtube.com/vi/${course.lessons[0]?.video?.publicPlaybackId}/0.jpg`}
+              alt={`Video thumbnail preview for ${course.lessons[0]?.name}`}
               width={320}
               height={240}
             />
