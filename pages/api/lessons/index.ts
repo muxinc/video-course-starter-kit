@@ -14,7 +14,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
 
   switch (method) {
     case 'POST':
-      const { name, description, courseId, uploadId } = JSON.parse(req.body)
+      const { name, description, courseId } = JSON.parse(req.body)
 
       try {
         const id = session?.user?.id
@@ -37,7 +37,6 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
 
         const [video] = await prisma.video.findMany({
           where: {
-            uploadId,
             owner: {
               id: {
                 equals: id
@@ -58,11 +57,6 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
             course: {
               connect: {
                 id: course.id
-              }
-            },
-            video: {
-              connect: {
-                uploadId
               }
             }
           }

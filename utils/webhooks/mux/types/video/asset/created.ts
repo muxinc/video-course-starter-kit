@@ -11,11 +11,10 @@ type Props = {
 }
 
 const handler = async ({ data, metadata }: Props) => {
-  const { upload_id, playback_ids, status } = data;
+  const { playback_ids, status } = data;
 
   await prisma.video.updateMany({
     where: {
-      uploadId: upload_id,
       status: { not: 'ready' }
     },
     data: {
