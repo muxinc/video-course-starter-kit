@@ -29,7 +29,7 @@ const CourseOverview = ({ course }: Props) => {
           <div key={lesson.id} className='flex flex-col md:flex-row gap-6 mb-8'>
             {lesson.video?.publicPlaybackId && (
               <Image
-                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                src={`https://img.youtube.com/vi/${lesson.video.publicPlaybackId}/0.jpg`}
                 alt={`Video thumbnail preview for ${lesson.name}`}
                 width={320}
                 height={240}

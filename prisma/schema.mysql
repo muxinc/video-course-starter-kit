@@ -1,0 +1,84 @@
+USE `video-course-starter-kit`;
+
+CREATE TABLE `User` (
+  `id` VARCHAR(255) NOT NULL PRIMARY KEY,
+  `name` VARCHAR(255),
+  `email` VARCHAR(255) UNIQUE,
+  `emailVerified` DATETIME,
+  `image` VARCHAR(255)
+  -- 다른 관계 필드는 여기에 포함되지 않습니다.
+);
+
+CREATE TABLE `Account` (
+  `id` VARCHAR(255) NOT NULL PRIMARY KEY,
+  `userId` VARCHAR(255) NOT NULL,
+  `type` VARCHAR(255) NOT NULL,
+  `provider` VARCHAR(255) NOT NULL,
+  `providerAccountId` VARCHAR(255) NOT NULL,
+  `refresh_token` TEXT,
+  `access_token` TEXT,
+  `expires_at` INT,
+  `token_type` VARCHAR(255),
+  `scope` VARCHAR(255),
+  `id_token` TEXT,
+  `session_state` VARCHAR(255),
+  UNIQUE (`provider`, `providerAccountId`),
+  FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Session` (
+  `id` VARCHAR(255) NOT NULL PRIMARY KEY,
+  `sessionToken` VARCHAR(255) NOT NULL UNIQUE,
+  `userId` VARCHAR(255) NOT NULL,
+  `expires` DATETIME NOT NULL,
+  FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `VerificationToken` (
+  `identifier` VARCHAR(255) NOT NULL,
+  `token` VARCHAR(255) NOT NULL UNIQUE,
+  `expires` DATETIME NOT NULL,
+  PRIMARY KEY (`identifier`, `token`)
+);
+
+CREATE TABLE `Course` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `slug` VARCHAR(255) NOT NULL,
+  `authorId` VARCHAR(255) NOT NULL,
+  `published` BOOLEAN NOT NULL DEFAULT false,
+  FOREIGN KEY (`authorId`) REFERENCES `User`(`id`)
+);
+
+CREATE TABLE `Lesson` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `slug` VARCHAR(255) NOT NULL,
+  `courseId` INT NOT NULL,
+  FOREIGN KEY (`courseId`) REFERENCES `Course`(`id`)
+);
+
+CREATE TABLE `Video` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `lessonId` INT UNIQUE,
+  `ownerId` VARCHAR(255) NOT NULL,
+  `publicPlaybackId` VARCHAR(255),
+  `privatePlaybackId` VARCHAR(255),
+  `duration` FLOAT,
+  `aspectRatio` VARCHAR(255),
+  `status` VARCHAR(255) NOT NULL DEFAULT 'preparing',
+  `posterTime` FLOAT,
+  FOREIGN KEY (`lessonId`) REFERENCES `Lesson`(`id`),
+  FOREIGN KEY (`ownerId`) REFERENCES `User`(`id`)
+);
+
+CREATE TABLE `UserLessonProgress` (
+  `userId` VARCHAR(255) NOT NULL,
+  `lessonId` INT NOT NULL,
+  `completedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userId`, `lessonId`),
+  FOREIGN KEY (`userId`) REFERENCES `User`(`id`),
+  FOREIGN KEY (`lessonId`) REFERENCES `Lesson`(`id`)
+);

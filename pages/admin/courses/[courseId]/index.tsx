@@ -69,7 +69,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
                     <a className='flex gap-4 border border-gray-200 rounded-lg mb-6 cursor-pointer'>
                       {lesson.video?.publicPlaybackId && (
                         <Image
-                          src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                          src={`https://img.youtube.com/vi/${lesson.video.publicPlaybackId}/0.jpg`}
                           alt={`Video thumbnail preview for ${lesson.name}`}
                           width={180}
                           height={100}

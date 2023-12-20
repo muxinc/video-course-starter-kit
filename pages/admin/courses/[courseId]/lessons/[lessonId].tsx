@@ -7,7 +7,7 @@ import type { Session } from 'next-auth'
 import type { Lesson, Video } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { SubmitHandler } from "react-hook-form";
-import MuxPlayer from "@mux/mux-player-react/lazy";
+import VideoPlayer from 'components/VideoPlayer';
 import LessonForm, { Inputs } from 'components/forms/LessonForm'
 import Button from 'components/Button'
 import toast from 'react-hot-toast';
@@ -64,15 +64,12 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
       <div className='grid lg:grid-cols-2 gap-6'>
         <div>
           {lesson.video?.status === "ready" && lesson.video.publicPlaybackId ? (
-            <MuxPlayer
-              className='mb-6 w-full aspect-video'
-              streamType="on-demand"
+            <VideoPlayer
               playbackId={lesson.video.publicPlaybackId}
-              metadata={{
-                video_series: lesson.courseId,
-                video_title: lesson.name,
-                player_name: "Video Course Starter Kit",
-              }}
+              courseId={lesson.courseId}
+              lessonName={lesson.name}
+              videoUrl={lesson.video.publicPlaybackId}
+              thumbnail={`https://img.youtube.com/vi/${lesson.video.publicPlaybackId}/0.jpg`}
             />
           ) : (
             <div className='mb-6 w-full aspect-video bg-gray-200' />

@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import { useState } from 'react'
 import type { GetServerSideProps } from 'next'
 import type { Course, Lesson, Video } from "@prisma/client"
-import muxBlurHash from "@mux/blurhash";
 import { prisma } from 'utils/prisma'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { unstable_getServerSession } from "next-auth/next"
@@ -91,8 +90,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   course.lessons = await Promise.all(course.lessons.map(async (lesson) => {
     if (lesson?.video?.publicPlaybackId) {
-      const { blurHashBase64 } = await muxBlurHash(lesson.video.publicPlaybackId);
-      (lesson.video as VideoWithPlaceholder).placeholder = blurHashBase64;
     }
     return lesson
   }))

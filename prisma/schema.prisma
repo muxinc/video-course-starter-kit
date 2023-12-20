@@ -85,7 +85,6 @@ model Video {
   lessonId          Int?    @unique
   owner             User    @relation(fields: [ownerId], references: [id])
   ownerId           String
-  uploadId          String  @unique
   publicPlaybackId  String?
   privatePlaybackId String?
   duration          Float?

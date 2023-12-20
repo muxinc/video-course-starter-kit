@@ -4,7 +4,7 @@ import Image from 'next/future/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
 import EmptyState from 'components/EmptyState'
-import MuxPlayer from "@mux/mux-player-react/lazy";
+import VideoPlayer from 'components/VideoPlayer'
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
 import type { UserLessonProgress } from '@prisma/client'
@@ -27,7 +27,6 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
   const [activeLesson, setActiveLesson] = useState(course.lessons[lessonIndex]);
   const playbackId = activeLesson?.video?.publicPlaybackId
   const videoReady = activeLesson?.video?.status === "ready"
-  const placeholder = activeLesson?.video?.placeholder
 
   useEffect(() => {
     const lessonIndex = course.lessons.findIndex(lesson => lesson.id === activeLesson.id) + 1
@@ -60,17 +59,12 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
     <div className='px-5 grid lg:grid-cols-[70%_30%]'>
       <div>
         {playbackId && videoReady ? (
-          <MuxPlayer
-            className='mb-6 w-full aspect-video'
-            streamType="on-demand"
+          <VideoPlayer
             playbackId={playbackId}
-            placeholder={placeholder}
-            onEnded={markLessonCompleted}
-            metadata={{
-              video_series: activeLesson.courseId,
-              video_title: activeLesson.name,
-              player_name: "Video Course Starter Kit",
-            }}
+            courseId={activeLesson.courseId}
+            lessonName={activeLesson.name}
+            videoUrl={`https://www.youtube.com/watch?v=${playbackId}`}
+            thumbnail={`https://img.youtube.com/vi/vi/${playbackId}/0.jpg`}
           />
         ) : (
           <div className='mb-6 w-full aspect-video bg-gray-200' />
@@ -98,7 +92,7 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
 
             {lesson.video?.publicPlaybackId && lesson.video.status === "ready" && (
               <Image
-                src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                src={`https://img.youtube.com/vi/${lesson.video.privatePlaybackId}/0.jpg`}
                 alt={`Video thumbnail preview for ${lesson.name}`}
                 width={106}
                 height={60}
