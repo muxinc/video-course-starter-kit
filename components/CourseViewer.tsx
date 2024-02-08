@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
-import Image from 'next/future/image'
+import Image from 'next/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
 import EmptyState from 'components/EmptyState'
@@ -85,10 +85,10 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
           <a
             onClick={() => setActiveLesson(lesson)}
             key={lesson.id}
-            className={clsx({
-              'flex gap-5 cursor-pointer hover:bg-gray-50 px-6 py-4': true,
-              'bg-yellow-50': playbackId === lesson.video?.publicPlaybackId
-            })}
+            className={clsx(
+              'flex gap-5 cursor-pointer hover:bg-gray-50 px-6 py-4',
+              playbackId === lesson.video?.publicPlaybackId && 'bg-yellow-50'
+            )}
           >
             {lessonProgress.includes(lesson.id) && (
               <span className='absolute z-10 -translate-x-2 -translate-y-2'>

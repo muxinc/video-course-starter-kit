@@ -33,8 +33,8 @@ const ViewCourse: NextPageWithLayout<ViewCoursePageProps> = ({ course, completed
       {!session && (
         <Banner>
           <p className='text-center'>
-            <Link href='/api/auth/signin'>
-              <a className='underline'>Sign in</a>
+            <Link href='/api/auth/signin' className='underline'>
+              Sign in
             </Link> to track your progress &rarr;{' '}
           </p>
         </Banner>

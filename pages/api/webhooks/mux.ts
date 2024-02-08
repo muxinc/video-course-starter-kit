@@ -7,6 +7,7 @@ import WEBHOOK_TYPES from "../../../utils/webhooks/mux/types"
 import get from "lodash.get"
 
 const webhookSecret = process.env.MUX_WEBHOOK_SECRET;
+const mux = new Mux();
 
 export const config = {
   api: {
@@ -22,10 +23,10 @@ async function buffer(readable: Readable) {
   return Buffer.concat(chunks);
 }
 
-function verifyWebhookSignature(rawBody: string | Buffer, req: NextApiRequest) {
+function verifyWebhookSignature(rawBody: string, req: NextApiRequest) {
   if (webhookSecret) {
     // this will raise an error if signature is not valid
-    Mux.Webhooks.verifyHeader(rawBody, req.headers['mux-signature'] as string, webhookSecret);
+    mux.webhooks.verifySignature(rawBody, req.headers, webhookSecret);
   } else {
     console.log('Skipping webhook signature verification because no secret is configured'); // eslint-disable-line no-console
   }

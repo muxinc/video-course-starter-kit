@@ -34,7 +34,8 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
     return fetch(`/api/lessons/${lesson.id}`, { method: 'DELETE' })
   }
 
-  const updateMutation = useMutation(updateLesson, {
+  const updateMutation = useMutation({
+    mutationFn: updateLesson,
     onSuccess: () => {
       toast.success('Lesson updated successfully')
     },
@@ -44,7 +45,8 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
     }
   })
 
-  const deleteMutation = useMutation(deleteLesson, {
+  const deleteMutation = useMutation({
+    mutationFn: deleteLesson,
     onSuccess: () => {
       router.push(`/admin/courses/${lesson.courseId}`)
       toast.success('Lesson deleted successfully')
@@ -81,7 +83,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
           <Button intent="danger" onClick={deleteMutation.mutate}>Delete this lesson</Button>
         </div>
         <div>
-          <LessonForm onSubmit={onSubmit} lesson={lesson} isLoading={updateMutation.isLoading} />
+          <LessonForm onSubmit={onSubmit} lesson={lesson} isLoading={updateMutation.isPending} />
         </div>
       </div>
     )
