@@ -1,7 +1,7 @@
 import { prisma } from 'utils/prisma'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Course } from '@prisma/client'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 
 export default async function assetHandler(req: NextApiRequest, res: NextApiResponse<Course | null>) {
@@ -21,7 +21,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
       break
     case 'PUT':
       const { name, description } = JSON.parse(req.body)
-      const session = await unstable_getServerSession(req, res, authOptions)
+      const session = await getServerSession(req, res, authOptions)
       if (!session) res.status(401).end();
 
       try {

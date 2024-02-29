@@ -2,7 +2,7 @@ import type { NextPage, GetServerSideProps } from 'next'
 import { prisma } from 'utils/prisma'
 import { useSession } from "next-auth/react"
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import type { Session } from 'next-auth'
 import type { Lesson, Video } from '@prisma/client'
 import { useRouter } from 'next/router'
@@ -34,7 +34,8 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
     return fetch(`/api/lessons/${lesson.id}`, { method: 'DELETE' })
   }
 
-  const updateMutation = useMutation(updateLesson, {
+  const updateMutation = useMutation({
+    mutationFn: updateLesson,
     onSuccess: () => {
       toast.success('Lesson updated successfully')
     },
@@ -44,7 +45,8 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
     }
   })
 
-  const deleteMutation = useMutation(deleteLesson, {
+  const deleteMutation = useMutation({
+    mutationFn: deleteLesson,
     onSuccess: () => {
       router.push(`/admin/courses/${lesson.courseId}`)
       toast.success('Lesson deleted successfully')
@@ -81,7 +83,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
           <Button intent="danger" onClick={deleteMutation.mutate}>Delete this lesson</Button>
         </div>
         <div>
-          <LessonForm onSubmit={onSubmit} lesson={lesson} isLoading={updateMutation.isLoading} />
+          <LessonForm onSubmit={onSubmit} lesson={lesson} isLoading={updateMutation.isPending} />
         </div>
       </div>
     )
@@ -92,7 +94,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
 export default AdminLessonEdit
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
 
   if (!session) {
     return {

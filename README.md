@@ -62,7 +62,7 @@ brew install planetscale/tap/pscale
 Next, authorize the Planetscale CLI with your newly created account by running:
 
 ```
-pscale auth
+pscale auth login
 ```
 
 Create a new database in your Planetscale account called `video-course-starter-kit`

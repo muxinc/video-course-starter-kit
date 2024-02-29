@@ -19,7 +19,8 @@ const AdminNewCourse: NextPage = () => {
     }).then(res => res.json())
   }
 
-  const mutation = useMutation(handler, {
+  const mutation = useMutation({
+    mutationFn: handler,
     onSuccess: (data: CourseCreateResult) => {
       router.push(`/admin/courses/${data.id}`)
     },
@@ -36,7 +37,7 @@ const AdminNewCourse: NextPage = () => {
   return (
     <>
       <Heading>New course</Heading>
-      <CourseForm onSubmit={onSubmit} isLoading={mutation.isLoading} />
+      <CourseForm onSubmit={onSubmit} isLoading={mutation.isPending} />
     </>
   );
 

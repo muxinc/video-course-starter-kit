@@ -10,12 +10,12 @@ type Props = {
 const Button = ({ children, intent = 'primary', ...rest }: Props) => {
   return (
     <button
-      className={clsx({
-        "px-4 py-3 rounded text-white my-4 inline-block w-fit": true,
-        'bg-slate-700 hover:bg-slate-800': intent === 'primary',
-        'text-slate-700 border border-slate-700': intent === 'secondary',
-        "bg-red-600 hover:bg-red-700": intent === "danger",
-      })}
+      className={clsx(
+        "px-4 py-3 rounded my-4 inline-block w-fit",
+        intent === 'primary' && 'bg-slate-700 hover:bg-slate-800 text-white',
+        intent === 'secondary' && 'text-slate-700 border border-slate-700',
+        intent === "danger" && "bg-red-600 hover:bg-red-700 text-white",
+      )}
       {...rest}
     >
       {children}

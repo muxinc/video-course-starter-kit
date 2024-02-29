@@ -3,11 +3,11 @@ import { prisma } from 'utils/prisma'
 import { useSession } from "next-auth/react"
 import { GetServerSideProps } from 'next'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import type { Session } from 'next-auth'
 import type { Course, Lesson, Video } from '@prisma/client'
 import Link from 'next/link'
-import Image from 'next/future/image'
+import Image from 'next/image'
 import CourseForm, { Inputs } from 'components/forms/CourseForm';
 import { SubmitHandler } from "react-hook-form";
 import Heading from 'components/Heading';
@@ -37,7 +37,8 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
     }).then(res => res.json())
   }
 
-  const mutation = useMutation(handler, {
+  const mutation = useMutation({ 
+    mutationFn: handler,
     onSuccess: (data: CourseUpdateResult) => {
       toast.success('Course updated successfully')
     },
@@ -56,7 +57,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
       <div className='grid md:grid-cols-2'>
         <div>
           <Heading as='h2'>{course.name}</Heading>
-          <CourseForm onSubmit={onSubmit} course={course} isLoading={mutation.isLoading} />
+          <CourseForm onSubmit={onSubmit} course={course} isLoading={mutation.isPending} />
         </div>
 
         <div>
@@ -65,21 +66,19 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
             <>
               {
                 course.lessons.map(lesson => (
-                  <Link key={lesson.id} href={`/admin/courses/${course.id}/lessons/${lesson.id}`}>
-                    <a className='flex gap-4 border border-gray-200 rounded-lg mb-6 cursor-pointer'>
-                      {lesson.video?.publicPlaybackId && (
-                        <Image
-                          src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
-                          alt={`Video thumbnail preview for ${lesson.name}`}
-                          width={180}
-                          height={100}
-                        />
-                      )}
+                  <Link key={lesson.id} href={`/admin/courses/${course.id}/lessons/${lesson.id}`} className='flex gap-4 border border-gray-200 rounded-lg mb-6 cursor-pointer'>
+                    {lesson.video?.publicPlaybackId && (
+                      <Image
+                        src={`https://image.mux.com/${lesson.video.publicPlaybackId}/thumbnail.jpg?width=640`}
+                        alt={`Video thumbnail preview for ${lesson.name}`}
+                        width={180}
+                        height={100}
+                      />
+                    )}
 
-                      <div className='py-2'>
-                        <Heading as='h5'>{lesson.name}</Heading>
-                      </div>
-                    </a>
+                    <div className='py-2'>
+                      <Heading as='h5'>{lesson.name}</Heading>
+                    </div>
                   </Link>
                 ))
               }
@@ -103,7 +102,7 @@ const AdminCourseEdit: NextPage<AdminCourseEditPageProps> = ({ course }) => {
 export default AdminCourseEdit
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
 
   if (!session) {
     return {

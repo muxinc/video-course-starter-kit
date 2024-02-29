@@ -5,10 +5,10 @@ import { useRouter } from 'next/router'
 import { prisma } from 'utils/prisma'
 
 import Mux from '@mux/mux-node';
-const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
+const mux = new Mux();
 
 import MuxUploader from '@mux/mux-uploader-react';
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import type { Session } from 'next-auth'
 import { useMutation } from '@tanstack/react-query';
@@ -50,7 +50,8 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
     }).then(res => res.json())
   }
 
-  const mutation = useMutation(handler, {
+  const mutation = useMutation({
+    mutationFn: handler,
     onSuccess: (data: LessonCreateResult) => {
       router.push(`/admin/courses/${courseId}/lessons/${data.id}`)
     },
@@ -76,8 +77,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
             <MuxUploader
               endpoint={uploadUrl}
               type="bar"
-              status
-              style={{ '--button-border-radius': '40px' }}
+              style={{ '--button-border-radius': '40px' } as React.CSSProperties}
               onSuccess={() => setIsVideoUploaded(true)}
               className='w-full mb-6'
             />
@@ -101,7 +101,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
 export default AdminNewLesson
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
 
   if (!session) {
     return {
@@ -112,7 +112,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const upload = await Video.Uploads.create({
+  const upload = await mux.video.uploads.create({
     cors_origin: 'https://localhost:3000',
     new_asset_settings: {
       playback_policy: ['public', 'signed'],

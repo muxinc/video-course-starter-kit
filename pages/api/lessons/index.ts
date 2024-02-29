@@ -1,13 +1,13 @@
 import { prisma } from 'utils/prisma'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Course, Lesson } from '@prisma/client'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 import slugify from '@sindresorhus/slugify';
 
 export default async function assetHandler(req: NextApiRequest, res: NextApiResponse<Lesson>) {
   const { method } = req
-  const session = await unstable_getServerSession(req, res, authOptions)
+  const session = await getServerSession(req, res, authOptions)
   if (!session) res.status(401).end();
 
   console.log("Session", JSON.stringify(session, null, 2))
