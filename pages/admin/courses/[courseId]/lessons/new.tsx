@@ -8,7 +8,7 @@ import Mux from '@mux/mux-node';
 const mux = new Mux();
 
 import MuxUploader from '@mux/mux-uploader-react';
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import type { Session } from 'next-auth'
 import { useMutation } from '@tanstack/react-query';
@@ -101,7 +101,7 @@ const AdminNewLesson: NextPage<AdminNewLessonPageProps> = ({ uploadUrl, uploadId
 export default AdminNewLesson
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
 
   if (!session) {
     return {

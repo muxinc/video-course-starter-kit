@@ -2,7 +2,7 @@ import type { NextPage, GetServerSideProps } from 'next'
 import { prisma } from 'utils/prisma'
 import { useSession } from "next-auth/react"
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import type { Session } from 'next-auth'
 import type { Lesson, Video } from '@prisma/client'
 import { useRouter } from 'next/router'
@@ -94,7 +94,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
 export default AdminLessonEdit
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
 
   if (!session) {
     return {

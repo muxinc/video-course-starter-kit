@@ -5,7 +5,7 @@ import type { Course, Lesson, Video } from "@prisma/client"
 import muxBlurHash from "@mux/blurhash";
 import { prisma } from 'utils/prisma'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { useSession } from "next-auth/react"
 import Link from 'next/link'
 import type { NextPageWithLayout } from 'pages/_app'
@@ -56,7 +56,7 @@ ViewCourse.getLayout = function getLayout(page: ReactElement) {
 export default ViewCourse
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
 
   const id = context?.query?.slug?.[0]
   if (typeof id !== "string") { throw new Error('missing id') };

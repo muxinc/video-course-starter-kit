@@ -1,7 +1,7 @@
 import { prisma } from 'utils/prisma'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { UserLessonProgress } from '@prisma/client'
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "../../auth/[...nextauth]"
 
 export default async function assetHandler(req: NextApiRequest, res: NextApiResponse<UserLessonProgress | null>) {
@@ -11,7 +11,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
 
   switch (method) {
     case 'POST':
-      const session = await unstable_getServerSession(req, res, authOptions)
+      const session = await getServerSession(req, res, authOptions)
       if (!session) res.status(401).end();
 
       try {
