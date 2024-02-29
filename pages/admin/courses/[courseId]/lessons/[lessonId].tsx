@@ -61,7 +61,7 @@ const AdminLessonEdit: NextPage<AdminLessonEditPageProps> = ({ lesson }) => {
 
   if (session) {
     return (
-      <div className='grid lg:grid-cols-2 gap-6'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
         <div>
           {lesson.video?.status === "ready" && lesson.video.publicPlaybackId ? (
             <MuxPlayer
