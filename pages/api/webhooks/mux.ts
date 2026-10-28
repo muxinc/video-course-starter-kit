@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream';
 
-import Mux from '@mux/mux-node';
+import Mux from '@mux/ts';
 
 import WEBHOOK_TYPES from "../../../utils/webhooks/mux/types"
 import get from "lodash.get"
@@ -23,10 +23,10 @@ async function buffer(readable: Readable) {
   return Buffer.concat(chunks);
 }
 
-function verifyWebhookSignature(rawBody: string, req: NextApiRequest) {
+async function verifyWebhookSignature(rawBody: string, req: NextApiRequest) {
   if (webhookSecret) {
     // this will raise an error if signature is not valid
-    mux.webhooks.verifySignature(rawBody, req.headers, webhookSecret);
+    await mux.webhooks.verifySignature(rawBody, req.headers, webhookSecret);
   } else {
     console.log('Skipping webhook signature verification because no secret is configured'); // eslint-disable-line no-console
   }
@@ -42,7 +42,7 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
       const rawBody = await buffer(req).then(buf => buf.toString('utf8'));
 
       try {
-        verifyWebhookSignature(rawBody, req);
+        await verifyWebhookSignature(rawBody, req);
       } catch (e) {
         console.error('Error verifyWebhookSignature - is the correct signature secret set?', e);
         res.status(400).end((e as Error).message)
