@@ -4,7 +4,7 @@ import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { useRouter } from 'next/router'
 import { prisma } from 'utils/prisma'
 
-import Mux from '@mux/mux-node';
+import Mux from '@mux/ts';
 const mux = new Mux();
 
 import MuxUploader from '@mux/mux-uploader-react';
@@ -115,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const upload = await mux.video.uploads.create({
     cors_origin: 'https://localhost:3000',
     new_asset_settings: {
-      playback_policy: ['public', 'signed'],
+      playback_policies: ['public', 'signed'],
       passthrough: JSON.stringify({ userId: session.user?.id })
     }
   });
