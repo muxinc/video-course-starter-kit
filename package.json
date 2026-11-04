@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@mux/blurhash": "^0.1.2",
-    "@mux/mux-player-react": "^2.3.2",
     "@mux/mux-uploader-react": "^1.0.0-beta.15",
     "@mux/ts": "^16.0.0",
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -21,6 +20,9 @@
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/react-query": "^5.18.1",
+    "@videojs/mux-data": "^10.3.0",
+    "@videojs/mux-video": "^10.3.0",
+    "@videojs/react": "^10.3.0",
     "clsx": "^2.1.0",
     "lodash.get": "^4.4.2",
     "next": "14.1.0",

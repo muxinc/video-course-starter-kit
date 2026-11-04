@@ -14,7 +14,7 @@ We used modern tooling to build this example project, including:
 - [Prisma](https://www.prisma.io/) for ORM
 - [NextAuth](https://next-auth.js.org/) for authentication via GitHub
 - [Mux](https://mux.com) for video streaming and thumbnail generation
-- [Mux Player](https://docs.mux.com/guides/video/mux-player) for video playback
+- [Video.js](https://videojs.org/) for video playback, with the [Mux Data extension](https://videojs.org/docs/framework/react/guides/mux-data) for playback monitoring
 - [Mux Uploader](https://github.com/muxinc/elements/tree/main/packages/mux-uploader-react) for video uploading
 
 ## Deploy your own
