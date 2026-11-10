@@ -18,11 +18,18 @@ export default async function assetHandler(req: NextApiRequest, res: NextApiResp
         const userId = session?.user?.id
         if (!userId) throw Error("Cannot create course: missing id on user record")
 
-        const connect = await prisma.userLessonProgress.create({
-          data: {
+        const connect = await prisma.userLessonProgress.upsert({
+          where: {
+            userId_lessonId: {
+              userId,
+              lessonId: parseInt(lessonId)
+            }
+          },
+          create: {
             lessonId: parseInt(lessonId),
             userId
-          }
+          },
+          update: {}
         })
 
         res.status(200).json(connect)

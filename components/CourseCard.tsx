@@ -16,7 +16,7 @@ const CourseCard = ({ course, isAdmin }: Props) => {
   const href = isAdmin ? `/admin/courses/${course.id}` : `/courses/${course.id}`
   return (
     <>
-      <Link href={href} className='w-full border rounded-lg transition shadow-sm hover:shadow-md cursor-pointer'>
+      <Link href={href} className='w-full border rounded-lg transition shadow-xs hover:shadow-md cursor-pointer'>
         {course.lessons[0]?.video?.publicPlaybackId && (
           <Image
             className="w-full"

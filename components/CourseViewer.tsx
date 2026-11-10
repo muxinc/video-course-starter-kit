@@ -4,7 +4,7 @@ import Image from 'next/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
 import EmptyState from 'components/EmptyState'
-import MuxPlayer from "@mux/mux-player-react/lazy";
+import LessonPlayer from 'components/LessonPlayer'
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
 import type { UserLessonProgress } from '@prisma/client'
@@ -60,17 +60,11 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
     <div className='px-5 grid grid-cols-1 lg:grid-cols-[70%_30%]'>
       <div>
         {playbackId && videoReady ? (
-          <MuxPlayer
-            className='mb-6 w-full aspect-video'
-            streamType="on-demand"
+          <LessonPlayer
             playbackId={playbackId}
+            lesson={activeLesson}
             placeholder={placeholder}
             onEnded={markLessonCompleted}
-            metadata={{
-              video_series: activeLesson.courseId,
-              video_title: activeLesson.name,
-              player_name: "Video Course Starter Kit",
-            }}
           />
         ) : (
           <div className='mb-6 w-full aspect-video bg-gray-200' />
