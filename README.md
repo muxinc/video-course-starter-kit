@@ -158,4 +158,4 @@ The [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prism
 
 ## Questions? Comments?
 
-Tweet us [@MuxHQ](https://twitter.com/muxhq) or email help@mux.com with anything you need help with.
+Tweet us [@MuxHQ](https://twitter.com/muxhq) or visit [our support page](https://www.mux.com/support) for anything you need help with.
